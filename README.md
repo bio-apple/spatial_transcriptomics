@@ -22,5 +22,8 @@ ST分类：
 
 **比较表：基于测序 vs. 基于成像的空间转录组技术**
 
-<img src="./VS.png" width=600 height=600>
+<img src="./VS.png" width=500 height=500>
 
+**Visium、Visium HD 和 Stereo-seq 三者比较**
+
+<img src="./Visium-HD_Stereo-seq.png" width=650 height=500>
