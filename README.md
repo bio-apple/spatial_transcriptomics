@@ -2,7 +2,7 @@
 
 ## 0.Overview of commonly used ST platforms
 
-<div style="font-size: 11px;">
+<div style="font-size: 8px;">
 
 | Platform (type) | Resolution and panel type | Sample types | RNA quality | Best use cases |
 |:---|:---|:---|:---|:---|
