@@ -67,8 +67,10 @@
 | **Bin 100** | $100 \times 100$ | **$50\text{ }\mu\text{m}$** | **组织结构域级**（接近经典版 10x Visium 的 $55\text{ }\mu\text{m}$ Spot） |
 
 </small>
-2. The starting sequencing depth recommendation is 5,000 raw reads per 10x10 um tissue. 
-3. StrataMap Spatial detected up to 4000 unique transcripts per 10 × 10 µm bin
-4. 1-12 tissue sections can be placed on each slide
+
+
+* The starting sequencing depth recommendation is 5,000 raw reads per 10x10 um tissue. 
+* StrataMap Spatial detected up to 4000 unique transcripts per 10 × 10 µm bin
+* 1-12 tissue sections can be placed on each slide
 
 ---
