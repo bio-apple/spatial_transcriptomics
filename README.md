@@ -74,3 +74,26 @@
 * 1-12 tissue sections can be placed on each slide
 
 ---
+## [2.QC](./2.QC/REAME.md)
+
+
+---
+## 3.spatial alignment
+
+<img src="3.spatial_alignment/spatial_alignment.png">
+
+| 维度 | 核心结论 |
+|------|----------|
+| 总体 | **没有万能冠军**，方法选择高度依赖平台与场景 |
+| NGS 类 | PASTE2、SPACEL 精度领先 |
+| 成像类 | Spateo 综合最优 |
+| 鲁棒性 | PASTE2、SPACEL 最稳定 |
+| 多切片 | Spateo 优势明显 |
+| 跨平台 | 当前方法普遍不足，是重要发展方向 |
+| 大数据 | 需预对齐 + 降采样 + 参数优化 |
+| 下游 | 好对齐显著提升 3D 空间聚类精度 |
+| 工具 | SABench 提供可复现的评测框架 |
+
+[Yan Y, Gu T, Sun C, et al. Benchmarking alignment methods for spatial transcriptomics data[J]. Nature Computational Science, 2026: 1-18.](https://www.nature.com/articles/s43588-026-00977-z)
+
+---
