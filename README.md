@@ -4,7 +4,7 @@
 
 <img src="./0.platform/resolution.jpeg" height=200 width=600>
 
-## 0.Overview of commonly used ST platforms
+## [0.Overview of commonly used ST platforms](./0.platform/README.md)
 
 <small>
 
