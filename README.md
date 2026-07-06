@@ -74,7 +74,7 @@
 * 1-12 tissue sections can be placed on each slide
 
 ---
-## [2.QC](./2.QC/REAME.md)
+## [2.QC](./2.QC/README.md)
 
 
 ---
