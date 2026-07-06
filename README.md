@@ -76,6 +76,7 @@
 ---
 ## [2.QC](./2.QC/README.md)
 
+[Mao G, Yang Y, Luo Z, et al. SpatialQC: automated quality control for spatial transcriptome data[J]. Bioinformatics, 2024, 40(8): btae458.](https://academic.oup.com/bioinformatics/article/40/8/btae458/7720780?login=false)
 
 ---
 ## [3.spatial alignment](./3.spatial alignment/README.md)
