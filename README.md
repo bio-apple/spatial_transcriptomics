@@ -80,7 +80,7 @@
 
 ---
 
-## [3.spatial alignment](./3.spatial alignment/README.md)
+## [3.spatial alignment](./3.spatial_alignment/README.md)
 
 <img src="3.spatial_alignment/spatial_alignment.png" height=650 width=500>
 
