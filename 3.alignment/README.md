@@ -1,29 +1,146 @@
-# SABench：空间转录组切片对齐方法系统评测解读
+# 空间转录组多切片对齐与整合
 
-> 论文解读 | Yan Y, Gu T, Sun C, et al. *Nature Computational Science*, 2026  
-> DOI: [10.1038/s43588-026-00977-z](https://doi.org/10.1038/s43588-026-00977-z)  
-> 原文 PDF: `2026-Benchmarking alignment methods for spatial transcriptomics data.pdf`  
-> 开源工具: [https://github.com/Yunzhi-Yan/SABench](https://github.com/Yunzhi-Yan/SABench)
-
----
-
-## 一、研究背景
-
-空间转录组（ST）技术能在组织原位同时捕获基因表达与空间坐标，但几乎所有平台都基于 **二维（2D）组织切片** 操作，而生物组织本质上是三维的。将多张切片**空间对齐（spatial alignment）** 到统一坐标系，是实现 3D 组织重建、跨切片整合和下游空间分析的关键计算步骤。
-
-尽管 PASTE、STAligner、Spateo 等方法不断涌现，领域内一直缺乏：
-
-- 专门针对**空间对齐**的系统 benchmark
-- 覆盖**跨平台、连续切片、大规模数据**等真实困难场景的评价
-- 面向用户的**方法选型指南**
-
-复旦大学颜云智、顾天一、钱斌志等人在 *Nature Computational Science* 发表本研究，对 **11 种主流空间对齐方法** 进行系统评测，并发布开源 benchmark 工具包 **SABench**。
+> **整合解读** | 两篇互补文献  
+> **综述地图**：Khan M A, Arslanturk S, Draghici S. *Nucleic Acids Research*, 2025, 53(12): gkaf536 — [DOI](https://doi.org/10.1093/nar/gkaf536)  
+> **系统评测**：Yan Y, Gu T, Sun C, et al. *Nature Computational Science*, 2026 — [DOI](https://doi.org/10.1038/s43588-026-00977-z)  
+> **开源工具**： [SABench](https://github.com/Yunzhi-Yan/SABench) | [Zenodo](https://doi.org/10.5281/zenodo.18605715)
 
 ---
 
-## 二、评测范围
+## 摘要
 
-### 2.1 纳入的 11 种方法
+单张 Visium 切片约 5000 个 spot，Visium HD / Xenium 一张可达 **20 万～50 万** 位点。要理解完整组织，通常需要**多张连续切片**叠成 3D 视图，或把**不同实验、不同平台**的切片对齐到同一 **CCS（Common Coordinate System，公共坐标系）**。
+
+这就是空间转录组里的 **alignment（对齐）** 与 **integration（整合）**——保留基因表达模式与空间关系，同时消除切片间形变与批次差异。
+
+本文整合两篇关键文献：
+
+1. **NAR gkaf536 综述** — 24 种工具、三大流派、7 步通用 pipeline、任务分类框架  
+2. **SABench 系统评测** — 11 种主流方法在 295 个对齐任务上的精度、效率、鲁棒性与困难场景实测
+
+---
+
+## 一、为什么这件事很重要？
+
+ST 数据来自**二维切片**，每张只是组织的一「层」。多切片整合才能：
+
+- 重建 **3D 基因表达图谱**（组织 atlas）
+- 追踪 **发育时间轴**（胚胎不同时间点）
+- 比较 **疾病 vs 健康** 的空间表达差异
+- 提升低表达区域的 **基因覆盖度**
+- 支撑空间域识别、轨迹分析、细胞类型注释
+
+### 核心挑战
+
+| 挑战 | 具体表现 |
+|------|----------|
+| **组织异质性** | 不同切片区域、发育阶段结构差异大 |
+| **空间 warping** | 切片、固定、成像导致坐标变形 |
+| **批次效应** | 实验协议、平台分辨率不同 |
+| **高维稀疏** | 2 万+ 基因 × 数十万 spot，计算昂贵 |
+| **部分重叠** | 非连续切片、跨数据集时区域仅部分对应 |
+
+### 问题定义
+
+**输入**：多张切片的基因表达矩阵 + 空间坐标（± H&E 组织学图像）
+
+**输出**：对齐并整合到 CCS 的统一表示
+
+每张切片 \(X_i\) 通过变换 \(f_i: X_i \rightarrow Y\) 映射到公共空间，优化目标是最小化变换代价，同时保持生物学结构。
+
+---
+
+## 二、对齐任务的四个维度（gkaf536 Table 1）
+
+| | **数据集内（Within）** | **跨数据集（Across）** |
+|---|---|---|
+| **同质（Homogeneous）** | 连续切片、同一区域、完全/最大重叠 | 不同样本/实验，但结构相似 |
+| **异质（Heterogeneous）** | 非连续切片、不同区域或时间点 | 不同平台、分辨率、部分重叠 |
+
+| 场景 | 任务类型 | 典型工具 |
+|------|----------|----------|
+| 连续 Visium 脑片 3D 重建 | 同质 + 数据集内 | PASTE / PASTE2 |
+| 小鼠胚胎不同发育期 | 异质 + 数据集内 | STAligner / SpatiAlign |
+| Visium + MERFISH 跨平台 | 异质 + 跨数据集 | SLAT / STalign / CAST |
+
+---
+
+## 三、通用 Pipeline 与工具地图（gkaf536）
+
+### 3.1 七步通用流程
+
+```
+(A) 输入：基因表达 + 空间坐标 +（可选）H&E 图像
+      ↓
+(B) 预处理：归一化、log 变换、数据表示（矩阵 / 图 / 图像特征）
+      ↓
+(C) 降维与特征提取：PCA / UMAP / 图编码器
+      ↓
+(D) 对齐：低维嵌入间映射，优化 cost function
+      ↓
+(E) 整合：生成 CCS + 共享嵌入
+      ↓
+(F) 可视化：2D 空间图 + 3D 重建
+      ↓
+(G) 下游：组织 profiling、聚类、发育轨迹、疾病分析
+```
+
+### 3.2 三大流派（24 种工具）
+
+#### 统计映射（SM）— 约 10 种
+
+| 代表工具 | 核心技术 | 典型场景 |
+|----------|----------|----------|
+| **PASTE / PASTE2** | Fused Gromov-Wasserstein 最优传输 | 连续切片 pairwise / 中心切片整合 |
+| **GPSA** | 高斯过程 + warping 函数 | 切片形变校正 |
+| **PRECAST** | CAR 模型 + Potts 空间聚类 | 批次校正 + 空间域对齐 |
+| **Splotch** | 贝叶斯层次模型 + HMC | 脊髓、嗅球 spatial profiling |
+| **DeST-OT / ST-GEARS / OTVI** | 最优传输变体 | 发育时间点、非线性形变 |
+
+**优势**：理论清晰，适合噪声和稀疏；**局限**：先验敏感，强非线性/跨批次可能不够鲁棒
+
+#### 图像处理与配准（IPR）— 4 种
+
+| 代表工具 | 特点 |
+|----------|------|
+| **STalign** | 微分同胚映射，跨 MERFISH / Visium |
+| **STIM** | ImgLib2，3D 对齐框架 |
+| **STUtility** | H&E superpixel + ICP landmark |
+| **STaCker** | U-Net 深度学习，无 landmark |
+
+**优势**：利用形态学结构；**局限**：需高质量 H&E，软组织 inter-sample 变异大时易失败
+
+#### 图方法（GB）— 约 10 种
+
+| 代表工具 | 特点 |
+|----------|------|
+| **STAligner** | 图注意力自编码器 + triplet loss |
+| **SpatiAlign** | 对比学习 + 跨 batch 对齐 |
+| **SLAT** | GCN + 对抗学习 + Wasserstein 图匹配 |
+| **Graspot / SPIRAL** | GAT + 非平衡 OT / cluster-aware GW |
+| **SPACEL / GraphST / STAIR** | 空间域识别 + 多切片整合 |
+
+**gkaf536 作者建议**：异质/跨数据集场景优先关注 **autoencoder 系图方法**（STAligner、SLAT、SpatiAlign、Graspot）
+
+### 3.3 常用 Benchmark 数据集
+
+| 数据集 | 平台 | 用途 |
+|--------|------|------|
+| **DLPFC**（人前额叶皮层） | 10x Visium | 12 片连续切片，6 层皮层注释 |
+| **Stereo-seq 小鼠胚胎** | Stereo-seq | 不同发育时间点 |
+| **Slide-seq 海马** | Slide-seq | 连续切片 3D 重建 |
+| **MERFISH 脑** | MERFISH | 跨冠状/矢状面对齐 |
+| **Xenium 乳腺癌** | 10x Xenium | 病理注释验证 |
+
+---
+
+## 四、SABench 系统评测（Nat Comput Sci 2026）
+
+gkaf536 指出领域**缺乏统一 benchmark**；复旦大学颜云智等发布 **SABench**，对 **11 种主流方法**在 **295 个对齐任务**上系统评测。
+
+### 4.1 评测范围
+
+**纳入的 11 种方法**
 
 | 方法 | 对齐类型 | 特点 |
 |------|----------|------|
@@ -31,202 +148,89 @@
 | PASTE2 | 线性 | 支持部分重叠切片 |
 | STAligner | 混合 | 依赖 landmark 选择 |
 | GPSA | 非线性 | 深度高斯过程 |
-| SLAT | 混合 | 返回匹配点对，需额外处理 |
-| STalign | 非线性 | 仅支持成对对齐；需单细胞分辨率 |
-| CAST | 混合 | 支持跨平台；仅成对对齐 |
+| SLAT | 混合 | 返回匹配点对 |
+| STalign | 非线性 | 成对对齐；需单细胞分辨率 |
+| CAST | 混合 | 支持跨平台；仅成对 |
 | STAIR | 混合 | 对齐 + 整合 + 3D 重建 |
 | SPACEL | 混合 | 利用区域信息，稳定性强 |
-| Spateo | 混合 | 多切片表现优异；刚性/非刚性可选 |
-| SANTO | 混合 | 粗到细对齐与拼接；仅成对对齐 |
+| Spateo | 混合 | 多切片表现优异 |
+| SANTO | 混合 | 粗到细对齐；仅成对 |
 
-### 2.2 数据集规模
+**数据规模**：240 张切片，260 对真实 + 35 对模拟，**295 个对齐任务**；覆盖 Visium、Visium HD、MERFISH、Stereo-seq、Xenium、CosMx 等 **14 种**平台。
 
-| 指标 | 数量 |
-|------|------|
-| 切片总数 | 240 |
-| 真实切片对 | 260 |
-| 模拟切片对 | 35 |
-| **对齐任务总计** | **295**（每种方法均执行） |
+**六大评测维度**：精度、效率、鲁棒性、下游影响、困难场景、易用性（30+ 子项）
 
-### 2.3 涵盖的技术平台
+### 4.2 常规场景结果
 
-10x Visium、10x Visium HD、ST、MERFISH、Stereo-seq、BaristaSeq、STARmap、STARmap PLUS、Slide-seq、Slide-seqV2、Open-ST、Xenium、Xenium 5K、CosMx 等 **14 种** 空间转录组技术。
-
-### 2.4 六大评测维度
-
-```
-1. 对齐精度（Accuracy）
-   ├── 基因型指标：PCC、Cosine Similarity、SSIM、MI
-   └── 地标型指标：区域标签匹配准确率、区域重叠比
-
-2. 计算效率（Efficiency）
-   ├── 运行时间
-   └── 峰值内存占用
-
-3. 鲁棒性（Robustness）
-   ├── 切片重叠比例扰动
-   └── 初始旋转角度扰动（15° 递增，0–360°）
-
-4. 下游任务影响（Downstream Impact）
-   └── 3D 空间聚类（GraphST）的 ARI、NMI、HOM、COM
-
-5. 困难场景（Challenging Cases）
-   ├── 跨平台对齐
-   ├── 连续多切片（>10 张）
-   └── 大规模高分辨率数据
-
-6. 易用性（Usability）
-   └── 可用性、代码质量、文档、可复现性等 30+ 子项
-```
-
----
-
-## 三、常规场景评测结果
-
-### 3.1 10x Visium（人 DLPFC 数据集）
-
-- 3 个个体，各 4 张切片，平均约 3,561 spots，33,538 基因
-- **综合排名前四**：PASTE2、SPACEL、STAIR、CAST
-- PASTE2、STAIR、SPACEL 在其他 Visium 数据集上亦保持领先
-
-### 3.2 MERFISH（小鼠下丘脑视前区）
-
-- 5 张切片，平均 5,663 细胞，155 基因
-- **综合表现最优**：Spateo（刚性/非刚性）、PASTE2
-- 与 Visium 结果不同，说明**平台类型显著影响方法排名**
-
-### 3.3 测序类 vs 成像类综合排名
-
-| 平台类别 | 数据集 | 切片数 | 综合前三 |
-|----------|--------|--------|----------|
-| NGS 类 | ST、Visium、Stereo-seq | 27 | **PASTE2、SPACEL、Spateo** |
-| 成像类 | MERFISH、BaristaSeq、STARmap | 44 | **Spateo、STAIR、SPACEL** |
-
-**效率权衡**：PASTE2、SPACEL 精度高但耗时较长；Spateo 内存消耗略高。若优先追求精度，可接受效率折中。
-
-### 3.4 指标一致性
-
-Kendall's tau 相关系数显示，多数精度指标排名高度一致（>0.7），评测结果可靠；少数指标间存在互补性（<0.5）。
-
----
-
-## 四、下游任务影响
-
-以 GraphST 3D 空间聚类为下游任务（DLPFC 数据集）：
-
-- **12/15** 种对齐设置优于未对齐基线
-- **SPACEL、CAST、PASTE2** 下游表现最佳
-- 各指标（ARI、NMI 等）较基线提升约 **0.3**
-
-**结论**：高质量对齐显著改善 3D 空间域识别；在空间重建工作流中，对齐方法应严格比较和筛选。
-
----
-
-## 五、鲁棒性评测
-
-### 5.1 切片重叠比例扰动
-
-- 多数方法随重叠比例增加精度提升
-- **SPACEL** 在各条件下保持高精度，稳定性突出
-
-### 5.2 初始旋转角度扰动
-
-| 鲁棒性高 | 角度敏感 |
+| 平台类别 | 综合前三 |
 |----------|----------|
-| PASTE2、STAIR、SPACEL、Spateo、SANTO、STAligner（最优 landmark） | PASTE、SLAT |
+| **NGS 类**（ST、Visium、Stereo-seq） | **PASTE2、SPACEL、Spateo** |
+| **成像类**（MERFISH、BaristaSeq、STARmap） | **Spateo、STAIR、SPACEL** |
 
-- 初始角度偏差在 **±30°** 内通常对齐效果更好
-- **PASTE2 + SPACEL** 在两种扰动下综合最稳
+- Visium DLPFC：PASTE2、SPACEL、STAIR、CAST 领先  
+- MERFISH 下丘脑：Spateo、PASTE2 最优  
+- **平台类型显著影响方法排名**——没有跨平台通用冠军
 
----
+### 4.3 下游任务影响
 
-## 六、困难场景评测
+以 GraphST 3D 空间聚类为下游（DLPFC）：
 
-### 6.1 跨平台对齐
+- **12/15** 种对齐设置优于未对齐基线  
+- **SPACEL、CAST、PASTE2** 下游最佳，ARI/NMI 等提升约 **0.3**
 
-**数据集 1**：小鼠嗅球 Stereo-seq vs Slide-seqV2（2 张切片）
+### 4.4 鲁棒性
 
-- **STAligner、CAST** 表现最优，SLAT 亦较好
+| 扰动类型 | 最稳定 |
+|----------|--------|
+| 切片重叠比例变化 | **SPACEL** 全程高精度 |
+| 初始旋转角度（0–360°） | **PASTE2、STAIR、SPACEL、Spateo** |
+| 角度敏感（慎用） | PASTE、SLAT |
 
-**数据集 2**：10 大平台小鼠脑冠状切片（MERFISH、Xenium、Visium、Stereo-seq、CosMx 等）
+初始角度偏差在 **±30°** 内通常效果更好。
 
-- 空间分辨率从亚细胞到 100 μm，基因 panel 差异大
-- 多数方法可运行但效果差
-- 仅 **MERFISH ↔ Xenium ↔ Xenium 5K** 之间略可接受
-- **跨平台对齐仍是当前最大短板**
+### 4.5 困难场景
 
-### 6.2 连续多切片
-
-| 数据集 | 切片数 | 最优方法 |
-|--------|--------|----------|
-| Stereo-seq Flysta3D | 16 | **Spateo** |
-| Open-ST 人转移淋巴结 | 19（~100 万细胞） | **Spateo** |
-| MERFISH | 33 / 129 | **Spateo** |
-
-其他方法仅在特定数据集表现尚可，或切片数过多时无法运行。
-
-### 6.3 大规模高分辨率数据
-
-以 Xenium 人乳腺癌 2 张切片为例：
-
-- 仅少数方法能完成对齐，几乎无一满意
-- 高分辨率 + 大规模数据易触发 **内存溢出**
-
-**三种缓解策略**：
-
-| 策略 | 说明 | 示例 |
-|------|------|------|
-| **粗预对齐（PA）** | 手动观察 + 刚性变换，统一初始角度 | STalign 预对齐后近完美对齐且大幅提速 |
-| **参数优化（BestPara）** | 系统调参（如 Spateo） | 显著改善对齐效果 |
-| **降采样 + 分辨率恢复（DR）** | 降分辨率对齐，再映射回原始分辨率 | 解决内存瓶颈；PA+DR 组合效果更佳 |
-
----
-
-## 七、易用性评测
-
-基于标准化可用性框架（30+ 子项，含可用性、代码质量、文档、可复现性等）：
-
-| 排名 | 方法 |
+| 场景 | 结论 |
 |------|------|
-| 最易用 | **Spateo、PASTE 系列** |
-| 中等 | 多数方法 |
-| 门槛较高 | GPSA、SANTO（对编程经验不足用户） |
+| **跨平台** | 多数方法效果差；仅 MERFISH ↔ Xenium 略可接受；**当前最大短板** |
+| **连续多切片（>10 张）** | **Spateo** 优势明显（16～129 片） |
+| **大规模高分辨率** | Xenium 乳腺癌等：易内存溢出；需 **预对齐（PA）+ 降采样（DR）+ 调参** |
+
+### 4.6 易用性与消融
+
+- **最易用**：Spateo、PASTE 系列  
+- **门槛较高**：GPSA、SANTO  
+- **消融**：打乱空间坐标 → 仅 SLAT、PASTE_p0 可对齐；打乱基因表达 → **全部失败**  
+- **结论**：方法最依赖 **基因表达相似性** + **相对空间位置**
 
 ---
 
-## 八、消融分析：对齐依赖什么信息？
+## 五、整合选型指南
 
-| 场景 | 结果 |
-|------|------|
-| 仅用空间坐标（打乱基因表达） | SLAT、PASTE_p0 仍可对齐；其他方法失败 |
-| 仅用基因表达（打乱空间位置） | **全部方法失败** |
-| 仅用基因表达 + 消除密度差异 | 多数方法仍可全局对齐 |
+### 5.1 按场景快速选型（综述 + SABench 合并）
 
-**结论**：现有方法最依赖 **基因表达相似性** 与 **相对空间位置关系**；局部形态特征（如细胞密度）作用有限。
+| 你的场景 | 优先考虑 |
+|----------|----------|
+| 连续 Visium 切片 3D 重建 | **PASTE / PASTE2** |
+| NGS 类数据（Visium / Stereo-seq） | **PASTE2、SPACEL** |
+| 成像类数据（MERFISH / Xenium） | **Spateo** |
+| 不同发育时间点（异质） | **STAligner / SpatiAlign** |
+| 有区域注释标签 | **SPACEL** |
+| 跨平台对齐 | **CAST / SLAT / STAligner**（仍困难，无成熟方案） |
+| 仅需匹配点对 | **SLAT** |
+| 单细胞分辨率 + 密度结构 | **STalign** |
+| 组织边界清晰 | **STAligner** |
+| 有高质量 H&E | **STalign / STaCker** |
+| 超大数据 / 内存溢出 | **预对齐 + 降采样 + Spateo 调参** |
+| 需要不确定性估计 | **GPSA / Splotch** |
 
----
-
-## 九、实用选型指南（论文 Fig. 6）
-
-### 9.1 快速选型
-
-```
-测序类（NGS）数据        → 优先 PASTE2
-成像类数据              → 优先 Spateo
-有区域注释标签          → SPACEL
-跨平台对齐              → CAST / SLAT
-仅需匹配点对、不需新坐标 → SLAT
-单细胞分辨率 + 密度结构  → STalign
-组织边界清晰            → STAligner
-```
-
-### 9.2 推荐工作流
+### 5.2 推荐工作流
 
 ```
 1. 数据准备
    ├── 统一为 AnnData 格式
    ├── 质控（过滤细胞/基因）
-   └── 粗预对齐（校正初始切片方向）
+   └── 粗预对齐（校正初始切片方向，±30° 内更佳）
 
 2. 正式对齐
    ├── 按平台选择首选方法
@@ -235,88 +239,103 @@ Kendall's tau 相关系数显示，多数精度指标排名高度一致（>0.7�
 
 3. 对齐后检查
    ├── 视觉检查
-   ├── 指标评估（PCC、SSIM、MI、区域重叠比等）
+   ├── 指标评估（PCC、SSIM、MI、ARI、区域重叠比等）
    └── 不满意 → 换方法重试
 
 4. 下游分析
    └── 3D 聚类、空间域识别、细胞通讯等
 ```
 
-### 9.3 特殊场景建议
+### 5.3 特殊场景
 
 | 场景 | 建议 |
 |------|------|
-| 内存溢出 | 降分辨率 → 对齐 → 恢复分辨率 |
+| 内存溢出 | 降分辨率 → 对齐 → 恢复分辨率（PA+DR） |
 | 对齐质量差 | 参数调优 → 换方法 → 手动 landmark |
-| 跨平台 | 目前无成熟方案，CAST/STAligner 可尝试 |
-| 超大数据 | 预对齐 + 降采样 + 参数优化组合使用 |
+| 跨平台 | CAST/STAligner 可尝试，但需降低预期 |
+| 超大数据 | 预对齐 + 降采样 + 参数优化组合 |
 
 ---
 
-## 十、未来发展方向（论文观点）
+## 六、下游应用（gkaf536）
 
-1. **跨平台对齐**：生物学意义重大，但现有方法普遍不足，亟需新算法
-2. **跨组学对齐**：整合 ST + 影像 + 表观组 + 空间蛋白组，在物理 3D 空间中共配准
-3. **时空组学对齐**：跨发育阶段、跨时间点的 ST 数据对齐
-4. **大规模数据**：亚细胞分辨率下数据量指数增长，需兼顾速度与精度
-5. **大语言模型**：LLM 在单细胞和空间组学中已展现潜力，有望辅助对齐任务
+| 应用方向 | 代表案例 |
+|----------|----------|
+| **组织 profiling** | PASTE 在 DLPFC 无监督恢复层 marker |
+| **细胞类型/空间域聚类** | 整合后聚类优于纯 scRNA-seq 整合 |
+| **发育分析** | STAligner 追踪小鼠胚胎器官比例变化 |
+| **疾病进展** | ATAT 对齐 UC/CD 结肠切片 |
+| **生物标志物** | GPSA 识别乳腺癌 PRSS23、CST4 |
 
 ---
 
-## 十一、SABench 工具包
+## 七、尚未解决的问题与未来方向
+
+| 问题 | 说明 |
+|------|------|
+| **可扩展性** | 百万级 spot 全自动对齐仍困难 |
+| **跨平台对齐** | 生物学意义重大，SABench 证实普遍不足 |
+| **H&E 利用不足** | 多数工具未充分做 3D 形态重建 |
+| **软组织** | 脑以外 inter-sample 变异大的组织仍是难点 |
+| **与 scRNA 整合混淆** | ST-spot 对齐 ≠ ST-scRNA 整合 |
+
+**未来方向**：跨组学对齐、时空组学对齐、LLM 辅助对齐、标准化 benchmark（SABench 已迈出一步）
+
+---
+
+## 八、SABench 工具包
 
 作者将评测框架封装为 **SABench**，支持：
 
-- 快速计算评测指标
-- 与现有 11 种方法直接对比
-- 用新数据 benchmark 新方法
-- 大规模数据的交互式粗对齐、网格降采样、分辨率恢复
-- 方法特异性参数调优策略
+- 快速计算评测指标，与 11 种方法直接对比  
+- 用新数据 benchmark 新方法  
+- 大规模数据的交互式粗对齐、网格降采样、分辨率恢复  
+- 方法特异性参数调优策略  
 
-**GitHub**: [https://github.com/Yunzhi-Yan/SABench](https://github.com/Yunzhi-Yan/SABench)  
-**Zenodo**: [https://doi.org/10.5281/zenodo.18605715](https://doi.org/10.5281/zenodo.18605715)
+**GitHub**: https://github.com/Yunzhi-Yan/SABench
 
 ---
 
-## 十二、总结
+## 总结对照
 
 | 维度 | 核心结论 |
 |------|----------|
-| 总体 | **没有万能冠军**，方法选择高度依赖平台与场景 |
+| 综述（gkaf536） | 24 工具分 SM / IPR / GB 三流派；异质场景优先图+自编码器 |
+| 评测（SABench） | **没有万能冠军**；平台与场景决定排名 |
 | NGS 类 | PASTE2、SPACEL 精度领先 |
 | 成像类 | Spateo 综合最优 |
 | 鲁棒性 | PASTE2、SPACEL 最稳定 |
 | 多切片 | Spateo 优势明显 |
-| 跨平台 | 当前方法普遍不足，是重要发展方向 |
-| 大数据 | 需预对齐 + 降采样 + 参数优化 |
-| 下游 | 好对齐显著提升 3D 空间聚类精度 |
-| 工具 | SABench 提供可复现的评测框架 |
+| 跨平台 | 当前方法普遍不足 |
+| 大数据 | 预对齐 + 降采样 + 参数优化 |
+| 下游 | 好对齐显著提升 3D 空间聚类 |
+| 依赖信息 | 基因表达相似性 + 相对空间位置 |
 
-本研究为空间转录组切片对齐提供了迄今较全面的方法学参考，对 3D 组织重建、跨切片整合和多平台数据融合具有直接指导价值。
+> **综述告诉你「有哪些路」；SABench 告诉你「哪条路在你这种数据上更稳」。**
 
 ---
 
 ## 参考文献
 
-```
-Yan Y, Gu T, Sun C, Zhang Y, Cui Y, Lin S, et al.
-Benchmarking alignment methods for spatial transcriptomics data.
-Nature Computational Science. 2026.
-doi: 10.1038/s43588-026-00977-z
-```
+### 主文献
 
-**相关链接**
+1. Khan M A, Arslanturk S, Draghici S. A comprehensive review of spatial transcriptomics data alignment and integration. *Nucleic Acids Research*, 2025, 53(12): gkaf536. https://doi.org/10.1093/nar/gkaf536
 
-- 论文: https://doi.org/10.1038/s43588-026-00977-z
-- SABench: https://github.com/Yunzhi-Yan/SABench
-- Zenodo 数据: https://doi.org/10.5281/zenodo.18605715
+2. Yan Y, Gu T, Sun C, Zhang Y, Cui Y, Lin S, et al. Benchmarking alignment methods for spatial transcriptomics data. *Nature Computational Science*, 2026. https://doi.org/10.1038/s43588-026-00977-z
 
-**主要对标方法原文**
+### 工具与数据
 
-- PASTE: Zeira et al., Nat Methods, 2022
-- PASTE2: Liu et al., Genome Res, 2023
-- STAligner: Long et al., Nat Commun, 2022
-- Spateo: Qian et al., Cell, 2024
-- SPACEL: Li et al., Nat Commun, 2023
-- CAST: Fan et al., Nat Methods, 2023
-- SANTO: Li et al., Nat Commun, 2024
+- SABench: https://github.com/Yunzhi-Yan/SABench  
+- Zenodo: https://doi.org/10.5281/zenodo.18605715
+
+### 主要对标方法
+
+- PASTE: Zeira et al., *Nat Methods*, 2022  
+- PASTE2: Liu et al., *Genome Res*, 2023  
+- STAligner: Long et al., *Nat Commun*, 2022  
+- Spateo: Qian et al., *Cell*, 2024  
+- SPACEL: Li et al., *Nat Commun*, 2023  
+- CAST: Fan et al., *Nat Methods*, 2023  
+- SANTO: Li et al., *Nat Commun*, 2024  
+- SLAT: Li et al., *Nat Methods*, 2023  
+- STalign: Russell et al., *Nat Methods*, 2023
