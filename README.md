@@ -101,3 +101,12 @@
 [Khan M, Arslanturk S, Draghici S. A comprehensive review of spatial transcriptomics data alignment and integration[J]. Nucleic acids research, 2025, 53(12): gkaf536.](https://academic.oup.com/nar/article/53/12/gkaf536/8174767?login=false)
 
 ---
+
+## illumina
+
+<img src="illumina/workflow.png">
+
+* H&E（Hematoxylin苏木精-伊红）染色：苏木精将细胞核染成深蓝色/紫色，伊红将细胞质染成粉红色，从而让原本透明的组织切片在显微镜下显现出清晰的解剖学和病理学结构。
+* 形态学成像（Morphological Imaging） 的核心目的是在组织被破坏裂解之前，用光学的手段把细胞的结构、边界以及病理特征原汁原味地记录下来。
+* Open Microscopy Environment TIFF：行业绝对标准：OME-TIFF (*.ome.tif / *.ome.tiff)
+* **Illumina Spatial Solution:** https://help.connected.illumina.com/icm/reference/supported-data-types
