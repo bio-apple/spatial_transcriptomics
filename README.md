@@ -112,3 +112,13 @@
 * 形态学成像（Morphological Imaging） 的核心目的是在组织被破坏裂解之前，用光学的手段把细胞的结构、边界以及病理特征原汁原味地记录下来。
 * Open Microscopy Environment TIFF：行业绝对标准：OME-TIFF (*.ome.tif / *.ome.tiff)
 * **Illumina Spatial Solution:** https://help.connected.illumina.com/icm/reference/supported-data-types
+
+---
+
+## Cluster
+
+### sketch
+
+<img src="./sketch/sketched.jpeg">
+
+[Gingerich I K, Goods B A, Frost H R. Benchmarking sketching methods on spatial transcriptomics data[J]. Nucleic Acids Research, 2026, 54(9): gkag434.](https://academic.oup.com/nar/article-pdf/doi/10.1093/nar/gkag434/68264987/gkag434.pdf)
