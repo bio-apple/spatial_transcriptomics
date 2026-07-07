@@ -113,7 +113,7 @@
 
 <img src="4.pipeline/pipeline.png">
 
-## Cluster
+### 4-1:bin
 
 ### [sketch](./sketch/README.md)
 
@@ -122,7 +122,7 @@
 [Gingerich I K, Goods B A, Frost H R. Benchmarking sketching methods on spatial transcriptomics data[J]. Nucleic Acids Research, 2026, 54(9): gkag434.](https://academic.oup.com/nar/article-pdf/doi/10.1093/nar/gkag434/68264987/gkag434.pdf)
 
 
-## [cell_segmentation](./cell_segmentation/README.md)
+### [4-2:cell_segmentation](./cell_segmentation/README.md)
 
 **Visium HD (segmented):** https://bioconductor.org/books/release/OSTA/pages/seq-workflow-visium-hd-seg.html
 
