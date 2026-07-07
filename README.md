@@ -82,7 +82,7 @@
 
 ## [3.alignment](./3.alignment/README.md)
 
-<img src="3.spatial_alignment/spatial_alignment.png" height=650 width=500>
+<img src="3.alignment/spatial_alignment.png" height=650 width=500>
 
 | 维度 | 核心结论 |
 |------|----------|
