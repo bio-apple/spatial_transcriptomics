@@ -1,7 +1,6 @@
 # 测序法 Bin 级空间转录组：原始数据到预处理文件清单
 
-> 解读笔记 | 适用 Visium HD、Stereo-seq、Illumina StrataMap 等「测序 + 连续捕获面 + Bin 分析」平台  
-> 本地参考：[1.raw_data/README.md](./1.raw_data/README.md) | [README.md Spot vs Bin 对比](./README.md)
+> 解读笔记 | 适用 Visium HD、Stereo-seq、Illumina StrataMap 等「测序 + 连续捕获面 + Bin 分析」平台
 
 ---
 
