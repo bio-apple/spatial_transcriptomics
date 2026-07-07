@@ -1,6 +1,8 @@
 # 空间转录组学习笔记
 
-*Spatial omics:* https://www.sc-best-practices.org/spatial/introduction.html
+**Spatial omics:** https://www.sc-best-practices.org/spatial/introduction.html
+
+**Orchestrating Spatial Transcriptomics Analysis with Bioconductor:** https://bioconductor.org/books/release/OSTA/
 
 <img src="./0.platform/resolution.jpeg" height=200 width=600>
 
