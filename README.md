@@ -117,7 +117,7 @@
 
 ## Cluster
 
-### sketch
+### [sketch](./sketch/README.md)
 
 <img src="./sketch/sketched.jpeg">
 
