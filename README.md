@@ -113,7 +113,7 @@
 
 <img src="4.pipeline/pipeline.png">
 
-### 4-1:bin
+### 4-1:Bin
 
 ### [sketch](./sketch/README.md)
 
