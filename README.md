@@ -78,6 +78,12 @@
 * 1-12 tissue sections can be placed on each slide
 
 ---
+
+## pipeline
+
+<img src="pipeline/pipeline.png">
+
+---
 ## [2.QC](./2.QC/README.md)
 
 <img src="2.QC/SpatialQC.jpeg">
