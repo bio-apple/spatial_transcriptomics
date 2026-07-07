@@ -26,7 +26,7 @@
 
 [Grases D, Porta-Pardo E. A practical guide to spatial transcriptomics: lessons from over 1000 samples[J]. Trends in biotechnology, 2025.](https://www.cell.com/trends/biotechnology/abstract/S0167-7799(25)00357-9)
 
-<img src="./0.platform/Overview_of_spatial_transcriptomics.png" height=700 width=500>
+<img src="./0.platform/Overview_of_spatial_transcriptomics.png" height=350 width=250>
 
 [Heumos L, Schaar A C, Lance C, et al. Best practices for single-cell analysis across modalities[J]. Nature Reviews Genetics, 2023, 24(8): 550-572.](https://www.nature.com/articles/s41576-023-00586-w)
 
@@ -38,7 +38,7 @@
 
 [Rao A, Barkley D, França G S, et al. Exploring tissue architecture using spatial transcriptomics[J]. Nature, 2021, 596(7871): 211-220.](https://www.nature.com/articles/s41586-021-03634-9)
 
-<img src="./0.platform/Workflow.jpg" height=1000 width=600>
+<img src="./0.platform/Workflow.jpg" height=500 width=300>
 
 [Yue L, Liu F, Hu J, et al. A guidebook of spatial transcriptomic technologies, data resources and analysis approaches[J]. Computational and Structural Biotechnology Journal, 2023, 21: 940-955.](https://www.sciencedirect.com/science/article/pii/S2001037023000156)
 
