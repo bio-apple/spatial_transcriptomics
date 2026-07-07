@@ -98,4 +98,6 @@
 
 [Yan Y, Gu T, Sun C, et al. Benchmarking alignment methods for spatial transcriptomics data[J]. Nature Computational Science, 2026: 1-18.](https://www.nature.com/articles/s43588-026-00977-z)
 
+[Khan M, Arslanturk S, Draghici S. A comprehensive review of spatial transcriptomics data alignment and integration[J]. Nucleic acids research, 2025, 53(12): gkaf536.](https://academic.oup.com/nar/article/53/12/gkaf536/8174767?login=false)
+
 ---
