@@ -133,9 +133,35 @@
 
 <img src="illumina/workflow.png">
 
-* H&E（Hematoxylin苏木精-伊红）染色：苏木精将细胞核染成深蓝色/紫色，伊红将细胞质染成粉红色，从而让原本透明的组织切片在显微镜下显现出清晰的解剖学和病理学结构。
-* 形态学成像（Morphological Imaging） 的核心目的是在组织被破坏裂解之前，用光学的手段把细胞的结构、边界以及病理特征原汁原味地记录下来。
-* Open Microscopy Environment TIFF：行业绝对标准：OME-TIFF (*.ome.tif / *.ome.tiff)
-* **Illumina Spatial Solution:** https://help.connected.illumina.com/icm/reference/supported-data-types
+### H&E 图像在空间转录组中的作用
+
+H&E（hematoxylin and eosin，苏木精-伊红）苏木精将细胞核染成深蓝色/紫色，伊红将细胞质染成粉红色，从而让原本透明的组织切片在显微镜下显现出清晰的解剖学和病理学结构,染色图像是空间转录组实验中重要的形态学信息来源。空间转录组技术同时获得**基因表达信息（molecular information）**和**组织空间结构信息（spatial information）**，而 H&E 图像能够提供额外的**组织形态学信息（histological information）**，帮助解析基因表达与组织结构之间的关系。 在不同空间转录组分析任务中，H&E 图像的作用有所不同：
+
+| 分析用途 | 是否需要 H&E 预处理 | 主要作用 |
+| --- | --- | --- |
+| Spot/bin 表达可视化 | 少量处理 | 将空间表达结果映射到组织区域 |
+| 空间域识别（spatial domain identification） | 通常不需要或简单处理 | 提供组织形态辅助信息，提高空间区域划分准确性 |
+| 组织区域识别（tissue detection） | 需要 | 去除背景区域，确定有效组织范围 |
+| 细胞分割（cell segmentation） | 必须 | 根据组织形态识别细胞或细胞核边界 |
+| 图像特征提取（image feature extraction） | 必须 | 提取纹理、形态、颜色等特征用于多模态分析 |
+| 深度学习模型 | 必须 | 将 H&E 图像转换为图像特征，与基因表达联合建模 |
+
+### H&E image 常见文件格式
+
+H&E（hematoxylin and eosin，苏木精-伊红）图像通常来源于数字病理扫描（Whole Slide Imaging, WSI），常见文件格式包括普通图像格式、病理扫描格式以及生物图像标准格式。
+
+| 文件格式 | 全称 | 是否常用于空间转录组 | 特点 |
+| --- | --- | --- | --- |
+| `.tif / .tiff` | Tagged Image File Format | ⭐⭐⭐⭐⭐ 最常见 | 支持超大图像、多层分辨率、无损压缩，空间转录组分析中最常用 |
+| `.ome.tiff` | Open Microscopy Environment TIFF | ⭐⭐⭐⭐⭐ 推荐 | 支持图像数据和实验元信息，适合大规模空间组学分析 |
+| `.svs` | Aperio Whole Slide Image | ⭐⭐⭐⭐ | 病理扫描仪常用格式，包含多分辨率图像 |
+| `.ndpi` | Hamamatsu NanoZoomer Digital Pathology Image | ⭐⭐⭐⭐ | Hamamatsu扫描仪生成的病理图像格式 |
+| `.scn` | Leica SCN | ⭐⭐⭐ | Leica数字病理扫描格式 |
+| `.mrxs` | MIRAX Slide Format | ⭐⭐⭐ | 3DHISTECH扫描系统常用格式 |
+| `.czi` | Zeiss CZI | ⭐⭐ | Zeiss显微镜图像格式 |
+| `.png` | Portable Network Graphics | ⭐ | 常用于可视化和小规模分析 |
+| `.jpg/jpeg` | Joint Photographic Experts Group | ⭐ | 压缩格式，一般不推荐用于定量分析 |
+
+---
 
 ---
