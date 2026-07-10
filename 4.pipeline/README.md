@@ -249,3 +249,24 @@ doi: 10.3390/cells14141060
 ---
 
 *解读基于原文及文中引用的 Benchmark 文献整理，仅供科研交流，分析流程请结合具体项目验证。*
+
+1.	AI 视频
+	YouTube 全网播放量 Top 10
+	YouTube 30天上新 Top 5
+	YouTube 24h 上新 Top 3
+	B站 全网播放量 Top 10
+	B 站30天上新 Top 5
+	B站 24h 上新 Top 3
+2.	国内国际热门 AI 工具、分类、排行与比较
+3.	GitHub Stars AI 应用领域目前最受欢迎的Top开源项目,以下每个领域都要涉及至少1个
+	AI Agent
+	LLM 应用开发
+	本地大模型
+	AI绘画
+	多模态
+	机器学习框架
+4.	AI 新闻与动态（更新频次1周1次）
+	关注：OpenAI、Anthropic（Claude）、Google DeepMind、Meta AI、Microsoft AI、VIDIA AI、Hugging Face包括对应的公司公告和社交账号X（Twitter）
+	关注：GitHub Trending
+	关注：arXiv AI Papers，重点涉及cs.AI（人工智能）、cs.LG（机器学习）、cs.CL（语言模型）、cs.CV（视觉）
+	中文渠道 关注：机器之心、量子位、新智元、智源社区
