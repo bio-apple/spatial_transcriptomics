@@ -1,6 +1,14 @@
 # 空间转录组学习笔记
 
+Nature Methods 将 Spatially Resolved Transcriptomics（空间转录组学） 评选为 2020 年度技术（Method of the Year 2020）[Marx V. Method of the Year: spatially resolved transcriptomics[J]. Nature methods, 2021, 18(1): 9-14.](https://www.nature.com/articles/s41592-020-01033-y)
+
+## Tutorials
+
 **Spatial omics:** https://www.sc-best-practices.org/spatial/introduction.html
+
+**awesome spatial omics:** https://github.com/crazyhottommy/awesome_spatial_omics
+
+**Spatial Transcriptomics Tools:** https://github.com/p-gueguen/Spatial_transcriptomics_tools
 
 **Orchestrating Spatial Transcriptomics Analysis with Bioconductor:** https://bioconductor.org/books/release/OSTA/
 
@@ -8,9 +16,11 @@
 
 **Spatial transcriptomics data analysis: theory and practice:** https://bookdown.org/sjcockell/ismb-tutorial-2023/
 
-<img src="./0.platform/resolution.jpeg" height=200 width=600>
+**SIB Days tutorial: Analysis of spatial transcriptomics data:** https://sib-swiss.github.io/spatial-transcriptomics-training/
 
-## [0.Overview of commonly used ST platforms](./0.platform/README.md)
+---
+
+## [0.Reviews](./0.Reviews/README.md)
 
 <small>
 
@@ -30,19 +40,11 @@
 
 [Grases D, Porta-Pardo E. A practical guide to spatial transcriptomics: lessons from over 1000 samples[J]. Trends in biotechnology, 2025.](https://www.cell.com/trends/biotechnology/abstract/S0167-7799(25)00357-9)
 
-<img src="./0.platform/Overview_of_spatial_transcriptomics.png" height=350 width=250>
-
 [Heumos L, Schaar A C, Lance C, et al. Best practices for single-cell analysis across modalities[J]. Nature Reviews Genetics, 2023, 24(8): 550-572.](https://www.nature.com/articles/s41576-023-00586-w)
-
-<img src="./0.platform/spatial-transcriptomics.png" height=500 width=600>
 
 [Williams C G, Lee H J, Asatsuma T, et al. An introduction to spatial transcriptomics for biomedical research[J]. Genome medicine, 2022, 14(1): 68.](https://link.springer.com/article/10.1186/s13073-022-01075-1)
 
-![technologies_of_spatial_transcriptomics.png](./0.platform/technologies_of_spatial_transcriptomics.png)
-
 [Rao A, Barkley D, França G S, et al. Exploring tissue architecture using spatial transcriptomics[J]. Nature, 2021, 596(7871): 211-220.](https://www.nature.com/articles/s41586-021-03634-9)
-
-<img src="./0.platform/Workflow.jpg" height=500 width=300>
 
 [Yue L, Liu F, Hu J, et al. A guidebook of spatial transcriptomic technologies, data resources and analysis approaches[J]. Computational and Structural Biotechnology Journal, 2023, 21: 940-955.](https://www.sciencedirect.com/science/article/pii/S2001037023000156)
 
@@ -114,6 +116,8 @@
 ## [4.pipeline](4.pipeline/README.md)
 
 <img src="4.pipeline/pipeline.png">
+
+spatialGE:https://github.com/FridleyLab/spatialGE
 
 ### 4-1:Bin
 
