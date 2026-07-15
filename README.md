@@ -20,7 +20,7 @@ Nature Methods 将 Spatially Resolved Transcriptomics（空间转录组学） �
 
 ---
 
-## [空间转录组平台分组](./0.platform/)
+## [0.platform](./0.platform/)
 
 ### 平台分类
 
@@ -30,32 +30,32 @@ Nature Methods 将 Spatially Resolved Transcriptomics（空间转录组学） �
 | **G2** | 测序法 · 高分辨率 | 10x Visium HD、Stereo-seq、**Illumina StrataMap Spatial** ★ |
 | **G3** | 成像法 · 单细胞/亚细胞 | Vizgen MERSCOPE、10x Xenium、Bruker CosMx SMI |
 
-*. G1：测序法 · 低分辨率（spot/ROI 级）
+>**G1：测序法 · 低分辨率（spot/ROI 级)**
+> 
+>     | 平台 | 分辨率 | 基因覆盖 | 适合场景 |
+>     |------|--------|----------|----------|
+>     | **10x Visium** | 55 μm spot（多细胞） | 全转录组 | 最快上手、无偏发现、FF/FFPE |
+>     | **GeoMx DSP** | >55 μm ROI（建议 ≥50 细胞） | ROI 内全转录组 + 570 蛋白 | 病理圈选区域、多活检并行 |
 
-| 平台 | 分辨率 | 基因覆盖 | 适合场景 |
-|------|--------|----------|----------|
-| **10x Visium** | 55 μm spot（多细胞） | 全转录组 | 最快上手、无偏发现、FF/FFPE |
-| **GeoMx DSP** | >55 μm ROI（建议 ≥50 细胞） | ROI 内全转录组 + 570 蛋白 | 病理圈选区域、多活检并行 |
+>**G2：测序法 · 高分辨率（单细胞尺度）**
+> 
+> | 平台 | 分辨率 | 基因覆盖 | 适合场景 |
+> |------|--------|----------|----------|
+> | **Visium HD** | 2 μm 连续网格（分析常用 8/16 μm bin） | 全转录组 | FFPE 成熟生态 + 近单细胞精度 |
+> | **Stereo-seq** | 0.22 μm DNB 特征 | 全转录组 | 任意物种、超大捕获面积（cm 级） |
+> | **Illumina StrataMap** ★ | 1 μm 连续特征 + 细胞分割 | 全转录组（polyA⁺） | 大捕获面积（最大 50×15 mm）、Illumina 测序栈 |
 
-*. G2：测序法 · 高分辨率（单细胞尺度）
-
-| 平台 | 分辨率 | 基因覆盖 | 适合场景 |
-|------|--------|----------|----------|
-| **Visium HD** | 2 μm 连续网格（分析常用 8/16 μm bin） | 全转录组 | FFPE 成熟生态 + 近单细胞精度 |
-| **Stereo-seq** | 0.22 μm DNB 特征 | 全转录组 | 任意物种、超大捕获面积（cm 级） |
-| **Illumina StrataMap** ★ | 1 μm 连续特征 + 细胞分割 | 全转录组（polyA⁺） | 大捕获面积（最大 50×15 mm）、Illumina 测序栈 |
-
-*. G3：成像法 · 单细胞/亚细胞
-
-| 平台 | 分辨率 | 基因覆盖 | 适合场景 |
-|------|--------|----------|----------|
-| **10x Xenium** | ~200 nm | Prime 5K ~5000 基因；定制 ~480 基因 | FFPE 稳健、同片 RNA+蛋白（2025–2026） |
-| **CosMx SMI** | 亚细胞 | 6K panel 或 WTX ~18K 蛋白编码基因 | 高多重靶向 / 准全转录组成像 |
-| **MERSCOPE** | 单细胞/亚细胞 | 预制 ~5000 或全定制 ≤1000 基因 | 开放定制任意物种、支持类器官 |
+> G3：成像法 · 单细胞/亚细胞**
+>
+>| 平台 | 分辨率 | 基因覆盖 | 适合场景 |
+>|------|--------|----------|----------|
+>| **10x Xenium** | ~200 nm | Prime 5K ~5000 基因；定制 ~480 基因 | FFPE 稳健、同片 RNA+蛋白（2025–2026） |
+>| **CosMx SMI** | 亚细胞 | 6K panel 或 WTX ~18K 蛋白编码基因 | 高多重靶向 / 准全转录组成像 |
+>| **MERSCOPE** | 单细胞/亚细胞 | 预制 ~5000 或全定制 ≤1000 基因 | 开放定制任意物种、支持类器官 |
 
 ### 平台选择
 
- 你的需求 | 优先考虑 |
+|你的需求 | 优先考虑 |
 |----------|----------|
 | 无偏全转录组 + 最快上手 | **10x Visium**（G1） |
 | 无偏全转录组 + 已知 ROI / 多活检并行 | **GeoMx**（G1） |
@@ -91,111 +91,105 @@ Nature Methods 将 Spatially Resolved Transcriptomics（空间转录组学） �
 
 ## [1.raw_data](./1.raw_data/README.md)
 
-### 1-1
-**共通文件**
+### L0：湿实验端原始数据
+>**共通文件**
+>
+>| 类型 | 内容 | 用途 |
+>|------|------|------|
+>| **FASTQ** | Read1（spatial barcode）+ Read2（cDNA） | 送入官方流程 |
+>| **参考基因组** | 物种 GTF + FASTA | 比对注释 |
+>| **样本信息** | 物种、组织、切片厚度 | 流程配置 |
+>
+>**图像：组织图 vs 芯片图（两种不同用途的图）**
+>
+>| | **组织图（H&E）** | **芯片图（HD slide / CytAssist）** |
+>|---|---|---|
+>| 看什么 | 细胞形态、病理结构 | 组织在 **捕获芯片** 上的位置 |
+>| 用途 | 分割、注释、QC | **barcode → 坐标**（生信必需） |
+>| 坐标系 | 病理扫描仪 | **芯片坐标系** |
+>
+>**H&E 图像在空间转录组中的作用*
+>
+>H&E（hematoxylin and eosin，苏木精-伊红）苏木精将细胞核染成深蓝色/紫色，伊红将细胞质染成粉红色，从而让原本透明的组织切片在显微镜下显现出清晰的解剖学和病理学结构,染色图像是空间转录组实验中重要的形态学信息来源。空间转录组技术同时获得**基因表达信息（molecular information）**和**组织空间结构信息（spatial information）**，而 H&E 图像能够提供额外的**组织形态学信息（histological information）**，帮助解析基因表达与组织结构之间的关系。 在不同空间转录组分析任务中，H&E 图像的作用有所不同：
+>
+>| 分析用途 | 是否需要 H&E 预处理 | 主要作用 |
+>| --- | --- | --- |
+>| Spot/bin 表达可视化 | 少量处理 | 将空间表达结果映射到组织区域 |
+>| 空间域识别（spatial domain identification） | 通常不需要或简单处理 | 提供组织形态辅助信息，提高空间区域划分准确性 |
+>| 组织区域识别（tissue detection） | 需要 | 去除背景区域，确定有效组织范围 |
+>| 细胞分割（cell segmentation） | 必须 | 根据组织形态识别细胞或细胞核边界 |
+>| 图像特征提取（image feature extraction） | 必须 | 提取纹理、形态、颜色等特征用于多模态分析 |
+>| 深度学习模型 | 必须 | 将 H&E 图像转换为图像特征，与基因表达联合建模 |
 
-| 类型 | 内容 | 用途 |
-|------|------|------|
-| **FASTQ** | Read1（spatial barcode）+ Read2（cDNA） | 送入官方流程 |
-| **参考基因组** | 物种 GTF + FASTA | 比对注释 |
-| **样本信息** | 物种、组织、切片厚度 | 流程配置 |
+>**H&E image 常见文件格式**
+>
+>| 文件格式 | 全称 | 是否常用于空间转录组 | 特点 |
+>| --- | --- | --- | --- |
+>| `.tif / .tiff` | Tagged Image File Format | ⭐⭐⭐⭐⭐ 最常见 | 支持超大图像、多层分辨率、无损压缩，空间转录组分析中最常用 |
+>| `.ome.tiff` | Open Microscopy Environment TIFF | ⭐⭐⭐⭐⭐ 推荐 | 支持图像数据和实验元信息，适合大规模空间组学分析 |
+>| `.svs` | Aperio Whole Slide Image | ⭐⭐⭐⭐ | 病理扫描仪常用格式，包含多分辨率图像 |
+>| `.ndpi` | Hamamatsu NanoZoomer Digital Pathology Image | ⭐⭐⭐⭐ | Hamamatsu扫描仪生成的病理图像格式 |
+>| `.scn` | Leica SCN | ⭐⭐⭐ | Leica数字病理扫描格式 |
+>| `.mrxs` | MIRAX Slide Format | ⭐⭐⭐ | 3DHISTECH扫描系统常用格式 |
+>| `.czi` | Zeiss CZI | ⭐⭐ | Zeiss显微镜图像格式 |
+>| `.png` | Portable Network Graphics | ⭐ | 常用于可视化和小规模分析 |
+>| `.jpg/jpeg` | Joint Photographic Experts Group | ⭐ | 压缩格式，一般不推荐用于定量分析 |
 
-**图像：组织图 vs 芯片图（两种不同用途的图）**
+### L1 流程输出
 
-| | **组织图（H&E）** | **芯片图（HD slide / CytAssist）** |
-|---|---|---|
-| 看什么 | 细胞形态、病理结构 | 组织在 **捕获芯片** 上的位置 |
-| 用途 | 分割、注释、QC | **barcode → 坐标**（生信必需） |
-| 坐标系 | 病理扫描仪 | **芯片坐标系** |
-
-**H&E 图像在空间转录组中的作用*8
-
-H&E（hematoxylin and eosin，苏木精-伊红）苏木精将细胞核染成深蓝色/紫色，伊红将细胞质染成粉红色，从而让原本透明的组织切片在显微镜下显现出清晰的解剖学和病理学结构,染色图像是空间转录组实验中重要的形态学信息来源。空间转录组技术同时获得**基因表达信息（molecular information）**和**组织空间结构信息（spatial information）**，而 H&E 图像能够提供额外的**组织形态学信息（histological information）**，帮助解析基因表达与组织结构之间的关系。 在不同空间转录组分析任务中，H&E 图像的作用有所不同：
-
-| 分析用途 | 是否需要 H&E 预处理 | 主要作用 |
-| --- | --- | --- |
-| Spot/bin 表达可视化 | 少量处理 | 将空间表达结果映射到组织区域 |
-| 空间域识别（spatial domain identification） | 通常不需要或简单处理 | 提供组织形态辅助信息，提高空间区域划分准确性 |
-| 组织区域识别（tissue detection） | 需要 | 去除背景区域，确定有效组织范围 |
-| 细胞分割（cell segmentation） | 必须 | 根据组织形态识别细胞或细胞核边界 |
-| 图像特征提取（image feature extraction） | 必须 | 提取纹理、形态、颜色等特征用于多模态分析 |
-| 深度学习模型 | 必须 | 将 H&E 图像转换为图像特征，与基因表达联合建模 |
-
-**H&E image 常见文件格式**
-
-H&E（hematoxylin and eosin，苏木精-伊红）图像通常来源于数字病理扫描（Whole Slide Imaging, WSI），常见文件格式包括普通图像格式、病理扫描格式以及生物图像标准格式。
-
-| 文件格式 | 全称 | 是否常用于空间转录组 | 特点 |
-| --- | --- | --- | --- |
-| `.tif / .tiff` | Tagged Image File Format | ⭐⭐⭐⭐⭐ 最常见 | 支持超大图像、多层分辨率、无损压缩，空间转录组分析中最常用 |
-| `.ome.tiff` | Open Microscopy Environment TIFF | ⭐⭐⭐⭐⭐ 推荐 | 支持图像数据和实验元信息，适合大规模空间组学分析 |
-| `.svs` | Aperio Whole Slide Image | ⭐⭐⭐⭐ | 病理扫描仪常用格式，包含多分辨率图像 |
-| `.ndpi` | Hamamatsu NanoZoomer Digital Pathology Image | ⭐⭐⭐⭐ | Hamamatsu扫描仪生成的病理图像格式 |
-| `.scn` | Leica SCN | ⭐⭐⭐ | Leica数字病理扫描格式 |
-| `.mrxs` | MIRAX Slide Format | ⭐⭐⭐ | 3DHISTECH扫描系统常用格式 |
-| `.czi` | Zeiss CZI | ⭐⭐ | Zeiss显微镜图像格式 |
-| `.png` | Portable Network Graphics | ⭐ | 常用于可视化和小规模分析 |
-| `.jpg/jpeg` | Joint Photographic Experts Group | ⭐ | 压缩格式，一般不推荐用于定量分析 |
-
-**Visium HD 两条路径：**
-
-```
-FF 直接上片：
-  → 芯片上明场/H&E 图（1 张，定坐标）
-  → 可选额外高分辨 H&E（形态分析）
-
-FFPE + CytAssist：
-  → H&E 组织图 ①（形态）
-  → CytAssist/芯片对齐图 ②（定坐标）
-  → 两张图，软件配准后送 Space Ranger
-```
-
+>**Visium HD 两条路径：**
+>
+    ```
+    FF 直接上片：
+      → 芯片上明场/H&E 图（1 张，定坐标）
+      → 可选额外高分辨 H&E（形态分析）
+    
+    FFPE + CytAssist：
+      → H&E 组织图 ①（形态）
+      → CytAssist/芯片对齐图 ②（定坐标）
+      → 两张图，软件配准后送 Space Ranger
+    ```
 > **组织图 = 看形态；芯片图 = 定位置。**
-
-### 1-2
-**Visium HD（Space Ranger)**
-
-`sample/outs/` 核心结构：
-
-```
-outs/
-├── web_summary.html
-├── metrics_summary.csv
-├── barcode_mappings.parquet      # barcode ↔ bin ↔ cell 映射
-│
-├── binned_outputs/               # ★ Bin 分析主入口
-│   ├── square_002um/             # 2 μm（最细，极稀疏）
-│   ├── square_008um/             # 8 μm（★ 官方推荐）
-│   └── square_016um/             # 16 μm（更平滑）
-│       每个 bin 目录下：
-│       ├── raw_feature_bc_matrix/
-│       │   ├── barcodes.tsv.gz   # ★ 此处 barcode = bin ID
-│       │   ├── features.tsv.gz
-│       │   └── matrix.mtx.gz
-│       ├── raw_feature_bc_matrix.h5
-│       ├── filtered_feature_bc_matrix/
-│       ├── filtered_feature_bc_matrix.h5
-│       └── spatial/
-│           ├── tissue_positions.parquet
-│           ├── scalefactors_json.json
-│           ├── tissue_hires_image.png
-│           └── tissue_lowres_image.png
-│
-└── segmented_outputs/            # 细胞分割（可选）
-    ├── cell_segmentations.geojson
-    ├── filtered_feature_cell_matrix.h5
-    └── spatial/
-```
-
-**Stereo-seq（SAW）**
-
-| 文件 | 说明 |
-|------|------|
-| `.raw.gef` | 原始分子坐标 + count |
-| `.tissue.gef` | 组织范围内 bin 矩阵 |
-| `.cellbin.gef` | 细胞分割后 cell-bin 矩阵 |
-| `.gem` | 文本：`geneID, x, y, MIDCount, ExonCount` |
-| `.ipr` / 图像包 | StereoMap 配套图像 |
+> 
+>**Visium HD（Space Ranger)`sample/outs/` 核心结构**
+> 
+        outs/
+        ├── web_summary.html
+        ├── metrics_summary.csv
+        ├── barcode_mappings.parquet      # barcode ↔ bin ↔ cell 映射
+        │
+        ├── binned_outputs/               # ★ Bin 分析主入口
+        │   ├── square_002um/             # 2 μm（最细，极稀疏）
+        │   ├── square_008um/             # 8 μm（★ 官方推荐）
+        │   └── square_016um/             # 16 μm（更平滑）
+        │       每个 bin 目录下：
+        │       ├── raw_feature_bc_matrix/
+        │       │   ├── barcodes.tsv.gz   # ★ 此处 barcode = bin ID
+        │       │   ├── features.tsv.gz
+        │       │   └── matrix.mtx.gz
+        │       ├── raw_feature_bc_matrix.h5
+        │       ├── filtered_feature_bc_matrix/
+        │       ├── filtered_feature_bc_matrix.h5
+        │       └── spatial/
+        │           ├── tissue_positions.parquet
+        │           ├── scalefactors_json.json
+        │           ├── tissue_hires_image.png
+        │           └── tissue_lowres_image.png
+        │
+        └── segmented_outputs/            # 细胞分割（可选）
+            ├── cell_segmentations.geojson
+            ├── filtered_feature_cell_matrix.h5
+            └── spatial/
+>
+> **Stereo-seq（SAW）**
+>
+>| 文件 | 说明 |
+>|------|------|
+>| `.raw.gef` | 原始分子坐标 + count |
+>| `.tissue.gef` | 组织范围内 bin 矩阵 |
+>| `.cellbin.gef` | 细胞分割后 cell-bin 矩阵 |
+>| `.gem` | 文本：`geneID, x, y, MIDCount, ExonCount` |
+>| `.ipr` / 图像包 | StereoMap 配套图像 |
 
 ---
 ### 2.Bin_vs Spot
