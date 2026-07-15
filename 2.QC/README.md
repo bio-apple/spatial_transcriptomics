@@ -148,7 +148,7 @@ pip install -e .
 
 ```bash
 SpatialQC --adata your_data.h5ad \
-          --platform Visium \
+          --0.platform Visium \
           --slice slice \
           --markers markers.csv \
           --mito 'MT-' \

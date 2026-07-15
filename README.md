@@ -20,23 +20,62 @@ Nature Methods 将 Spatially Resolved Transcriptomics（空间转录组学） �
 
 ---
 
-## [0.Reviews](./0.Reviews/README.md)
+## [空间转录组平台分组](./0.platform/)
 
-<small>
+### 平台分类
 
-| Platform (type) | Resolution and panel type | Sample types | RNA quality | Best use cases |
-|:---|:---|:---|:---|:---|
-| **Visium (FF, sequencing)** | ~55 µm; whole transcriptome | Human, mouse, all species (polyA⁺) | RIN ≥ 7 (≥4 w/ CytAssist) | Broad discovery in fresh tissue |
-| **Visium (FFPE, sequencing)** | ~55 µm; whole transcriptome | Human, mouse FFPE | DV200 ≥ 50% (≥30% w/ CytAssist) | Archived samples; full profiling |
-| **Visium HD (sequencing)** | ~2 µm; whole transcriptome | Human, mouse FFPE or OCT | RIN ≥ 4; DV200 ≥ 30% | High-res + whole transcriptome |
-| **Illumina StrataMap Spatial (sequencing)** ★ | ~1 µm features; cellular resolution; whole transcriptome (polyA⁺, coding + long ncRNA) | Eukaryotic species; **FF (OCT) only** (FFPE in development, ~2027) | FF optimized; vendor has not published a fixed RIN/DV200 cutoff | Unbiased whole-transcriptome at cellular resolution; large capture area (up to 50 × 15 mm); multi-section / cohort-scale profiling within Illumina NGS + DRAGEN/ICM workflow |
-| **Xenium (imaging)** | Subcellular; targeted (up to 5000 genes; customizable) | Human, mouse FFPE or fresh-frozen; non-model (custom) | DV200 ≥ 10% | Cell typing; high-res profiling; cross-species (custom panels) |
-| **CosMx (imaging)** | Subcellular; targeted panels (up to 6K) or whole-transcriptome (~18K genes, WTX) | Human, mouse FFPE or fresh-frozen | DV200 ≥ 10% | Multiplexed profiling; spatial cell state mapping |
-| **MERFISH / seqFISH (imaging)** | Subcellular; highly multiplexed (customizable) | Fresh-frozen; FFPE (with optimization) | Protocol-dependent | Deep profiling in microscopy-capable labs |
-| **Stereo-seq (sequencing)** | 500 nm; whole transcriptome (species-specific probes) | Human, mouse, non-model (custom probes) | RIN ≥ 7 recommended | Nanoscale mapping; large area profiling |
-| **Non-model species** | Varies by platform and probe design | Visium (polyA⁺), Xenium, Stereo-seq, **StrataMap (polyA⁺, any eukaryote)** | Variable | Cross-species studies (requires custom panels or transcriptomes) |
+| 分组 | 技术类型 | 平台 |
+|------|----------|------|
+| **G1** | 测序法 · 低分辨率 | 10x Visium、GeoMx DSP |
+| **G2** | 测序法 · 高分辨率 | 10x Visium HD、Stereo-seq、**Illumina StrataMap Spatial** ★ |
+| **G3** | 成像法 · 单细胞/亚细胞 | Vizgen MERSCOPE、10x Xenium、Bruker CosMx SMI |
 
-</small>
+*. G1：测序法 · 低分辨率（spot/ROI 级）
+
+| 平台 | 分辨率 | 基因覆盖 | 适合场景 |
+|------|--------|----------|----------|
+| **10x Visium** | 55 μm spot（多细胞） | 全转录组 | 最快上手、无偏发现、FF/FFPE |
+| **GeoMx DSP** | >55 μm ROI（建议 ≥50 细胞） | ROI 内全转录组 + 570 蛋白 | 病理圈选区域、多活检并行 |
+
+*. G2：测序法 · 高分辨率（单细胞尺度）
+
+| 平台 | 分辨率 | 基因覆盖 | 适合场景 |
+|------|--------|----------|----------|
+| **Visium HD** | 2 μm 连续网格（分析常用 8/16 μm bin） | 全转录组 | FFPE 成熟生态 + 近单细胞精度 |
+| **Stereo-seq** | 0.22 μm DNB 特征 | 全转录组 | 任意物种、超大捕获面积（cm 级） |
+| **Illumina StrataMap** ★ | 1 μm 连续特征 + 细胞分割 | 全转录组（polyA⁺） | 大捕获面积（最大 50×15 mm）、Illumina 测序栈 |
+
+*. G3：成像法 · 单细胞/亚细胞
+
+| 平台 | 分辨率 | 基因覆盖 | 适合场景 |
+|------|--------|----------|----------|
+| **10x Xenium** | ~200 nm | Prime 5K ~5000 基因；定制 ~480 基因 | FFPE 稳健、同片 RNA+蛋白（2025–2026） |
+| **CosMx SMI** | 亚细胞 | 6K panel 或 WTX ~18K 蛋白编码基因 | 高多重靶向 / 准全转录组成像 |
+| **MERSCOPE** | 单细胞/亚细胞 | 预制 ~5000 或全定制 ≤1000 基因 | 开放定制任意物种、支持类器官 |
+
+### 平台选择
+
+ 你的需求 | 优先考虑 |
+|----------|----------|
+| 无偏全转录组 + 最快上手 | **10x Visium**（G1） |
+| 无偏全转录组 + 已知 ROI / 多活检并行 | **GeoMx**（G1） |
+| 无偏全转录组 + 单细胞尺度 + FFPE 生态成熟 | **Visium HD**（G2） |
+| 无偏全转录组 + 任意物种 + 超大组织 | **Stereo-seq**（G2） |
+| 无偏全转录组 + **1 µm 分辨率 + 大捕获面积 + Illumina 测序栈** | **StrataMap Spatial**（G2）★ |
+| 靶向 panel + 亚细胞精度 + FFPE 稳健 | **Xenium**（G3） |
+| 靶向 panel + 开放定制任意物种 | **MERSCOPE**（G3） |
+| 靶向高多重（6K）或准全转录组成像（WTX ~18K） | **CosMx**（G3） |
+
+样本类型决策补充:
+
+| 样本类型 | 推荐平台 |
+|----------|----------|
+| **FFPE 归档样本** | Visium v2/CytAssist、Visium HD、Xenium、CosMx |
+| **新鲜冷冻 FF** | Visium、Stereo-seq、StrataMap（当前仅 FF） |
+| **非模式物种** | Visium（polyA⁺）、Stereo-seq（定制探针）、MERSCOPE（≤1000 基因无设计费）、StrataMap（polyA⁺ 真核通用） |
+
+**注释**  
+- *FF*：Fresh Frozen（新鲜冷冻）；*FFPE*：福尔马林固定石蜡包埋；*FxF*：Fixed Frozen（固定冷冻）
 
 [Grases D, Porta-Pardo E. A practical guide to spatial transcriptomics: lessons from over 1000 samples[J]. Trends in biotechnology, 2025.](https://www.cell.com/trends/biotechnology/abstract/S0167-7799(25)00357-9)
 
@@ -51,6 +90,85 @@ Nature Methods 将 Spatially Resolved Transcriptomics（空间转录组学） �
 ---
 
 ## [1.raw_data](./1.raw_data/README.md)
+
+### 1-1
+**共通文件**
+
+| 类型 | 内容 | 用途 |
+|------|------|------|
+| **FASTQ** | Read1（spatial barcode）+ Read2（cDNA） | 送入官方流程 |
+| **参考基因组** | 物种 GTF + FASTA | 比对注释 |
+| **样本信息** | 物种、组织、切片厚度 | 流程配置 |
+
+**图像：组织图 vs 芯片图（两种不同用途的图）**
+
+| | **组织图（H&E）** | **芯片图（HD slide / CytAssist）** |
+|---|---|---|
+| 看什么 | 细胞形态、病理结构 | 组织在 **捕获芯片** 上的位置 |
+| 用途 | 分割、注释、QC | **barcode → 坐标**（生信必需） |
+| 坐标系 | 病理扫描仪 | **芯片坐标系** |
+
+**Visium HD 两条路径：**
+
+```
+FF 直接上片：
+  → 芯片上明场/H&E 图（1 张，定坐标）
+  → 可选额外高分辨 H&E（形态分析）
+
+FFPE + CytAssist：
+  → H&E 组织图 ①（形态）
+  → CytAssist/芯片对齐图 ②（定坐标）
+  → 两张图，软件配准后送 Space Ranger
+```
+
+> **组织图 = 看形态；芯片图 = 定位置。**
+
+### 1-2
+**Visium HD（Space Ranger)**
+
+`sample/outs/` 核心结构：
+
+```
+outs/
+├── web_summary.html
+├── metrics_summary.csv
+├── barcode_mappings.parquet      # barcode ↔ bin ↔ cell 映射
+│
+├── binned_outputs/               # ★ Bin 分析主入口
+│   ├── square_002um/             # 2 μm（最细，极稀疏）
+│   ├── square_008um/             # 8 μm（★ 官方推荐）
+│   └── square_016um/             # 16 μm（更平滑）
+│       每个 bin 目录下：
+│       ├── raw_feature_bc_matrix/
+│       │   ├── barcodes.tsv.gz   # ★ 此处 barcode = bin ID
+│       │   ├── features.tsv.gz
+│       │   └── matrix.mtx.gz
+│       ├── raw_feature_bc_matrix.h5
+│       ├── filtered_feature_bc_matrix/
+│       ├── filtered_feature_bc_matrix.h5
+│       └── spatial/
+│           ├── tissue_positions.parquet
+│           ├── scalefactors_json.json
+│           ├── tissue_hires_image.png
+│           └── tissue_lowres_image.png
+│
+└── segmented_outputs/            # 细胞分割（可选）
+    ├── cell_segmentations.geojson
+    ├── filtered_feature_cell_matrix.h5
+    └── spatial/
+```
+
+**Stereo-seq（SAW）**
+
+| 文件 | 说明 |
+|------|------|
+| `.raw.gef` | 原始分子坐标 + count |
+| `.tissue.gef` | 组织范围内 bin 矩阵 |
+| `.cellbin.gef` | 细胞分割后 cell-bin 矩阵 |
+| `.gem` | 文本：`geneID, x, y, MIDCount, ExonCount` |
+| `.ipr` / 图像包 | StereoMap 配套图像 |
+
+Bin 常用档位：bin20（~10 μm）、bin50（~25 μm）、bin100（~50 μm）。
 
 <small>
 
@@ -127,6 +245,30 @@ the 8 µm bin size is an effective starting point for most researchers.
 **Analysis, visualization, and integration of Visium HD spatial datasets with Seurat:** https://satijalab.org/seurat/articles/visiumhd_analysis_vignette)
 
 **Visium HD (segmented):** https://bioconductor.org/books/release/OSTA/pages/seq-workflow-visium-hd-seg.html
+
+| | **Bin（数字网格）** | **Cell（生物学单元）** |
+|---|---|---|
+| 是什么 | 算法划分的固定方块（如 8×8 μm） | 组织里真实的单个细胞 |
+| 谁定义的 | 生信流程（Space Ranger / SAW） | 图像 + 分子分布 |
+| 典型问题 | 跨细胞、多细胞混合、只盖住细胞一角 | 一细胞一表达谱 |
+| 经典 Visium 类比 | — | 更接近 Xenium 的单细胞输出 |
+
+| 平台 | 推荐流程 |
+|------|----------|
+| Visium HD | Space Ranger `segmented_outputs/`，或 2 μm bin + **Bin2cell** |
+| Stereo-seq | SAW → **CellBin**（利用芯片 track line 做亚像素配准） |
+| StrataMap | DRAGEN + ICM（宣称整合 1 μm 特征与分割） |
+
+### Spot vs Bin 概念速查
+
+| 比较维度 | Spot（物理捕获位点） | Bin（数字分箱/网格） |
+|----------|----------------------|----------------------|
+| 定义 | 芯片上固定的物理捕获区域 | 测序后按坐标划分的虚拟网格 |
+| 典型平台 | Visium v1/v2（55 μm spot） | Visium HD、StrataMap（2 μm / 1 μm 特征 → 8–16 μm bin 分析） |
+| 数据特点 | 多细胞混合，需去卷积 | 更细粒度，可细胞分割 |
+| 分析策略 | SPOTlight / Cell2location | 直接注释或 Bin2cell |
+
+
 
 ### 4-2:[sketch](./sketch/)
 
