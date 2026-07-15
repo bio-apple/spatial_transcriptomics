@@ -19,6 +19,19 @@ Nature Methods 将 Spatially Resolved Transcriptomics（空间转录组学） �
 **SIB Days tutorial: Analysis of spatial transcriptomics data:** https://sib-swiss.github.io/spatial-transcriptomics-training/
 
 ---
+## Reviews paper
+
+[Grases D, Porta-Pardo E. A practical guide to spatial transcriptomics: lessons from over 1000 samples[J]. Trends in biotechnology, 2025.](https://www.cell.com/trends/biotechnology/abstract/S0167-7799(25)00357-9)
+
+[Heumos L, Schaar A C, Lance C, et al. Best practices for single-cell analysis across modalities[J]. Nature Reviews Genetics, 2023, 24(8): 550-572.](https://www.nature.com/articles/s41576-023-00586-w)
+
+[Williams C G, Lee H J, Asatsuma T, et al. An introduction to spatial transcriptomics for biomedical research[J]. Genome medicine, 2022, 14(1): 68.](https://link.springer.com/article/10.1186/s13073-022-01075-1)
+
+[Rao A, Barkley D, França G S, et al. Exploring tissue architecture using spatial transcriptomics[J]. Nature, 2021, 596(7871): 211-220.](https://www.nature.com/articles/s41586-021-03634-9)
+
+[Yue L, Liu F, Hu J, et al. A guidebook of spatial transcriptomic technologies, data resources and analysis approaches[J]. Computational and Structural Biotechnology Journal, 2023, 21: 940-955.](https://www.sciencedirect.com/science/article/pii/S2001037023000156)
+
+---
 
 ## [0.platform](./0.platform/)
 
@@ -77,15 +90,11 @@ Nature Methods 将 Spatially Resolved Transcriptomics（空间转录组学） �
 **注释**  
 - *FF*：Fresh Frozen（新鲜冷冻）；*FFPE*：福尔马林固定石蜡包埋；*FxF*：Fixed Frozen（固定冷冻）
 
-[Grases D, Porta-Pardo E. A practical guide to spatial transcriptomics: lessons from over 1000 samples[J]. Trends in biotechnology, 2025.](https://www.cell.com/trends/biotechnology/abstract/S0167-7799(25)00357-9)
+[You Y, Fu Y, Li L, et al. Systematic comparison of sequencing-based spatial transcriptomic methods[J]. Nature methods, 2024, 21(9): 1743-1754.](https://www.nature.com/articles/s41592-024-02325-3)
 
-[Heumos L, Schaar A C, Lance C, et al. Best practices for single-cell analysis across modalities[J]. Nature Reviews Genetics, 2023, 24(8): 550-572.](https://www.nature.com/articles/s41576-023-00586-w)
+[Lim H J, Wang Y, Buzdin A, et al. A practical guide for choosing an optimal spatial transcriptomics technology from seven major commercially available options[J]. BMC genomics, 2025, 26(1): 47.](https://link.springer.com/article/10.1186/s12864-025-11235-3)
 
-[Williams C G, Lee H J, Asatsuma T, et al. An introduction to spatial transcriptomics for biomedical research[J]. Genome medicine, 2022, 14(1): 68.](https://link.springer.com/article/10.1186/s13073-022-01075-1)
-
-[Rao A, Barkley D, França G S, et al. Exploring tissue architecture using spatial transcriptomics[J]. Nature, 2021, 596(7871): 211-220.](https://www.nature.com/articles/s41586-021-03634-9)
-
-[Yue L, Liu F, Hu J, et al. A guidebook of spatial transcriptomic technologies, data resources and analysis approaches[J]. Computational and Structural Biotechnology Journal, 2023, 21: 940-955.](https://www.sciencedirect.com/science/article/pii/S2001037023000156)
+[Cervilla S, Grases D, Perez E, et al. A technical comparison of spatial transcriptomics platforms across six cancer types[J]. Genome Biology, 2026.](https://link.springer.com/article/10.1186/s13059-026-03937-y)
 
 ---
 
