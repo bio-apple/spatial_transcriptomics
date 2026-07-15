@@ -123,6 +123,8 @@ spatialGE:https://github.com/FridleyLab/spatialGE
 
 ### 4-2:[sketch](./sketch/)
 
+<img src="./sketch/sketched.jpeg">
+
 Visium HD 一张片 8 μm bin 动辄 30 万～40 万 列；Stereo-seq、MERFISH atlas 更是百万级。全量跑 PCA、建图、Louvain、去卷积——笔记本扛不住，服务器也慢。
 
 于是 Sketch（智能子抽样） 成了大样本空间转录组的标配：先抽一小撮「有代表性」的 spot/bin，在子集上算聚类或注释，再投影回全量。
@@ -153,12 +155,7 @@ Seurat Visium HD 教程里，小鼠脑 8 μm 数据约 **39 万 bin**；在 5 �
 
 ③ 论文推荐：**Spatially smoothed leverage scores**
 
-
-
-<img src="./sketch/sketched.jpeg">
-
 [Gingerich I K, Goods B A, Frost H R. Benchmarking sketching methods on spatial transcriptomics data[J]. Nucleic Acids Research, 2026, 54(9): gkag434.](https://academic.oup.com/nar/article-pdf/doi/10.1093/nar/gkag434/68264987/gkag434.pdf)
-
 
 ### SVG
 
