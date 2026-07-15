@@ -157,7 +157,7 @@ Seurat Visium HD 教程里，小鼠脑 8 μm 数据约 **39 万 bin**；在 5 �
 
 [Gingerich I K, Goods B A, Frost H R. Benchmarking sketching methods on spatial transcriptomics data[J]. Nucleic Acids Research, 2026, 54(9): gkag434.](https://academic.oup.com/nar/article-pdf/doi/10.1093/nar/gkag434/68264987/gkag434.pdf)
 
-### SVG
+### [SVG](./SVG/)
 
 | | **HVG（单细胞）** | **SVG（空间转录组）** |
 |---|---|---|
@@ -165,6 +165,8 @@ Seurat Visium HD 教程里，小鼠脑 8 μm 数据约 **39 万 bin**；在 5 �
 | **利用的信息** | 表达矩阵 | 表达矩阵 + **坐标** |
 | **典型用途** | 降维、聚类、批次校正 | 特征筛选、空间域发现、机制解读 |
 | **可能遗漏** | 有空间梯度但细胞间差异不大的基因 | 细胞类型 marker，但本身无显著空间模式 |
+
+<img src="SVG/SVG_vs_HVG.png">
 
 #### SVG 分为 **三类**：
 
