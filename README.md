@@ -121,7 +121,39 @@ spatialGE:https://github.com/FridleyLab/spatialGE
 
 ### 4-1:Bin
 
-### [sketch](./sketch/README.md)
+### 4-2:[sketch](./sketch/)
+
+Visium HD 一张片 8 μm bin 动辄 30 万～40 万 列；Stereo-seq、MERFISH atlas 更是百万级。全量跑 PCA、建图、Louvain、去卷积——笔记本扛不住，服务器也慢。
+
+于是 Sketch（智能子抽样） 成了大样本空间转录组的标配：先抽一小撮「有代表性」的 spot/bin，在子集上算聚类或注释，再投影回全量。
+
+| 平台 / 数据 | 量级（约） |
+|-------------|------------|
+| 经典 Visium | ~5,000 spot/片 |
+| Visium HD（8 μm） | **30 万～40 万 bin/片** |
+| Stereo-seq、大 MERFISH atlas | **10 万～百万+** 细胞/位点 |
+
+Seurat Visium HD 教程里，小鼠脑 8 μm 数据约 **39 万 bin**；在 5 万 sketch 上跑 Louvain 约 **27 秒**，全量 BANKSY 聚类同类操作约 **201 秒**——这还是「能放进内存」的情况。
+
+单细胞领域早有成熟方案：**Leverage score**（Seurat v5）、**Geosketch**（Hie et al., 2019）、**scSampler**（maximin 多样性）等——目标都是在**表达空间**里均匀覆盖异质性。
+
+关键发现：scRNA 的 Sketch 用在 ST 上会「抽歪」
+
+① 只用表达（PCA / Leverage / Geosketch）
+
+- **优点**：抓住全局转录异质性，稀有转录状态不易漏  
+- **缺点**：**过度抽样高变异区域**（肿瘤边缘、层状边界、免疫浸润带），**欠抽样同质区域**（大片均匀皮质、基质）  
+- **后果**：组织架构在 sketch 里变形——空间图看起来「该平的地方不平」
+
+② 只用坐标（uniform on xy）
+
+- **优点**：组织覆盖均匀，不遗漏物理区域  
+- **缺点**：**漏掉转录极端态**——稀有细胞类型、高表达 outlier 可能被忽略  
+- **后果**：聚类稳定，但生物学上「该有的稀有群没了」
+
+③ 论文推荐：**Spatially smoothed leverage scores**
+
+
 
 <img src="./sketch/sketched.jpeg">
 
