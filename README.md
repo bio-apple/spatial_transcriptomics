@@ -192,7 +192,7 @@ Nature Methods 将 Spatially Resolved Transcriptomics（空间转录组学） �
 >| `.ipr` / 图像包 | StereoMap 配套图像 |
 
 ---
-### 2.Bin_vs Spot
+### 2.Bin_vs_Spot
 
 SpaceRanger outputs Visium HD data at three bin sizes, offering **8 µm** and **16 µm** bin sizes in addition to the native 2 µm feature size.A custom bin size (in microns at even integer values between 10 and 100) can be defined in Space Ranger or via third-party tools.
 the 8 µm bin size is an effective starting point for most researchers.
