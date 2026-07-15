@@ -108,6 +108,35 @@ Nature Methods 将 Spatially Resolved Transcriptomics（空间转录组学） �
 | 用途 | 分割、注释、QC | **barcode → 坐标**（生信必需） |
 | 坐标系 | 病理扫描仪 | **芯片坐标系** |
 
+**H&E 图像在空间转录组中的作用*8
+
+H&E（hematoxylin and eosin，苏木精-伊红）苏木精将细胞核染成深蓝色/紫色，伊红将细胞质染成粉红色，从而让原本透明的组织切片在显微镜下显现出清晰的解剖学和病理学结构,染色图像是空间转录组实验中重要的形态学信息来源。空间转录组技术同时获得**基因表达信息（molecular information）**和**组织空间结构信息（spatial information）**，而 H&E 图像能够提供额外的**组织形态学信息（histological information）**，帮助解析基因表达与组织结构之间的关系。 在不同空间转录组分析任务中，H&E 图像的作用有所不同：
+
+| 分析用途 | 是否需要 H&E 预处理 | 主要作用 |
+| --- | --- | --- |
+| Spot/bin 表达可视化 | 少量处理 | 将空间表达结果映射到组织区域 |
+| 空间域识别（spatial domain identification） | 通常不需要或简单处理 | 提供组织形态辅助信息，提高空间区域划分准确性 |
+| 组织区域识别（tissue detection） | 需要 | 去除背景区域，确定有效组织范围 |
+| 细胞分割（cell segmentation） | 必须 | 根据组织形态识别细胞或细胞核边界 |
+| 图像特征提取（image feature extraction） | 必须 | 提取纹理、形态、颜色等特征用于多模态分析 |
+| 深度学习模型 | 必须 | 将 H&E 图像转换为图像特征，与基因表达联合建模 |
+
+**H&E image 常见文件格式**
+
+H&E（hematoxylin and eosin，苏木精-伊红）图像通常来源于数字病理扫描（Whole Slide Imaging, WSI），常见文件格式包括普通图像格式、病理扫描格式以及生物图像标准格式。
+
+| 文件格式 | 全称 | 是否常用于空间转录组 | 特点 |
+| --- | --- | --- | --- |
+| `.tif / .tiff` | Tagged Image File Format | ⭐⭐⭐⭐⭐ 最常见 | 支持超大图像、多层分辨率、无损压缩，空间转录组分析中最常用 |
+| `.ome.tiff` | Open Microscopy Environment TIFF | ⭐⭐⭐⭐⭐ 推荐 | 支持图像数据和实验元信息，适合大规模空间组学分析 |
+| `.svs` | Aperio Whole Slide Image | ⭐⭐⭐⭐ | 病理扫描仪常用格式，包含多分辨率图像 |
+| `.ndpi` | Hamamatsu NanoZoomer Digital Pathology Image | ⭐⭐⭐⭐ | Hamamatsu扫描仪生成的病理图像格式 |
+| `.scn` | Leica SCN | ⭐⭐⭐ | Leica数字病理扫描格式 |
+| `.mrxs` | MIRAX Slide Format | ⭐⭐⭐ | 3DHISTECH扫描系统常用格式 |
+| `.czi` | Zeiss CZI | ⭐⭐ | Zeiss显微镜图像格式 |
+| `.png` | Portable Network Graphics | ⭐ | 常用于可视化和小规模分析 |
+| `.jpg/jpeg` | Joint Photographic Experts Group | ⭐ | 压缩格式，一般不推荐用于定量分析 |
+
 **Visium HD 两条路径：**
 
 ```
@@ -168,22 +197,28 @@ outs/
 | `.gem` | 文本：`geneID, x, y, MIDCount, ExonCount` |
 | `.ipr` / 图像包 | StereoMap 配套图像 |
 
-Bin 常用档位：bin20（~10 μm）、bin50（~25 μm）、bin100（~50 μm）。
+---
+### 2.Bin_vs Spot
 
-<small>
+SpaceRanger outputs Visium HD data at three bin sizes, offering **8 µm** and **16 µm** bin sizes in addition to the native 2 µm feature size.A custom bin size (in microns at even integer values between 10 and 100) can be defined in Space Ranger or via third-party tools.
+the 8 µm bin size is an effective starting point for most researchers.
 
-| 比较维度 | Spot (物理捕获位点/斑点) | Bin (数字分箱/网格) |
-| :--- | :--- | :--- |
-| **硬件本质** | 芯片表面预先用微纳加工刻蚀好的、**离散的圆形捕获岛屿**。 | 芯片表面物理上**绝对连续、无缝铺满**的纳米/微米级高密度像素点。 |
-| **空间连续性** | **不连续（有盲区）。** 点与点之间存在大量组织无法被测到的物理空隙（留白死区）。 | **绝对连续。** 像数码相机的相机像素一样，全景无缝覆盖整张组织切片。 |
-| **尺寸可调性** | **物理固定。** 出厂硬件决定（如经典 Visium 的直径 $55\text{ }\mu\text{m}$，中心距 $100\text{ }\mu\text{m}$）。 | **算法可调。** 生信分析时可自由设置（如 `Bin20` $\approx 10\text{ }\mu\text{m}$，`Bin50` $\approx 25\text{ }\mu\text{m}$）。 |
-| **分辨率层级** | **多细胞级**（根据组织密度，单个 Spot 盖住 $1 \sim 10+$ 个细胞）。 | **虚拟单细胞级 $\rightarrow$ 组织级**（可通过调整分箱大小自由横向切换）。 |
-| **核心生信任务** | **细胞型解卷积（Deconvolution）**。<br>（利用单细胞参考集拆解每个 Spot 内的混合细胞比例） | **细胞分割（Cell Segmentation）**。<br>（结合 H&E 图像算法将连续的 Bin 打包成真实的单细胞） |
-| **典型代表平台** | 10x Genomics Visium（经典版）、传统 Spatial Transcriptomics。 | 华大 Stereo-seq、10x Visium HD、Illumina StrataMap™。 |
-| **下机原始文件** | `matrix.mtx.gz`、`spatial/tissue_positions.csv`（按 Spot ID 排列）。 | 巨大的坐标文件（如华大 `*.gef`、`*.tsv` 或存储分子坐标的 `*.parquet`）。 |
-| **单样本数据量** | **小。** 一张芯片几千个 Spot，普通笔记本电脑即可轻松跑完完整管线。 | **极大。** 动辄数百万个分箱，极其消耗服务器内存（RAM）与计算显存。 |
-| **样本包容度** | **高。** 容错率相对较好，对中等降解的样本适应力较强。 | **严苛。** 对切片平整度、RNA 完整度要求极高，极易产生边缘晕染（Smearing）噪声。 |
+**Analysis, visualization, and integration of Visium HD spatial datasets with Seurat:** https://satijalab.org/seurat/articles/visiumhd_analysis_vignette)
 
+**Visium HD (segmented):** https://bioconductor.org/books/release/OSTA/pages/seq-workflow-visium-hd-seg.html
+
+| 比较维度 | Spot（物理捕获位点） | Bin（数字分箱/网格） |
+|----------|----------------------|----------------------|
+| 定义 | 芯片上固定的物理捕获区域 | 测序后按坐标划分的虚拟网格 |
+| 典型平台 | Visium v1/v2（55 μm spot） | Visium HD、StrataMap（2 μm / 1 μm 特征 → 8–16 μm bin 分析） |
+| 数据特点 | 多细胞混合，需去卷积 | 更细粒度，可细胞分割 |
+| 分析策略 | SPOTlight / Cell2location | 直接注释或 Bin2cell |
+
+| 平台 | 推荐流程 |
+|------|----------|
+| Visium HD | Space Ranger `segmented_outputs/`，或 2 μm bin + **Bin2cell** |
+| Stereo-seq | SAW → **CellBin**（利用芯片 track line 做亚像素配准） |
+| StrataMap | DRAGEN + ICM（宣称整合 1 μm 特征与分割） |
 
 | 分箱名称 | 包含物理点矩阵 | 实际物理边长 ($\mu\text{m}$) | 生信层面的等价生物学概念 |
 | :--- | :--- | :--- | :--- |
@@ -192,16 +227,12 @@ Bin 常用档位：bin20（~10 μm）、bin50（~25 μm）、bin100（~50 μm）
 | **Bin 50** | $50 \times 50$ | **$25\text{ }\mu\text{m}$** | **多细胞级**（约覆盖 $2 \sim 4$ 个细胞，信号更丰富） |
 | **Bin 100** | $100 \times 100$ | **$50\text{ }\mu\text{m}$** | **组织结构域级**（接近经典版 10x Visium 的 $55\text{ }\mu\text{m}$ Spot） |
 
-</small>
-
-
 * The starting sequencing depth recommendation is 5,000 raw reads per 10x10 um tissue. 
 * StrataMap Spatial detected up to 4000 unique transcripts per 10 × 10 µm bin
 * 1-12 tissue sections can be placed on each slide
-
 ---
 
-## [2.QC](./2.QC/README.md)
+## [3.QC](./3.QC/README.md)
 
 <img src="2.QC/SpatialQC.jpeg">
 
@@ -236,38 +267,6 @@ Bin 常用档位：bin20（~10 μm）、bin50（~25 μm）、bin100（~50 μm）
 <img src="4.pipeline/pipeline.png">
 
 spatialGE:https://github.com/FridleyLab/spatialGE
-
-### 4-1:[Bin2cell:segmentation](./Bin2cell_segmentation)
-
-SpaceRanger outputs Visium HD data at three bin sizes, offering **8 µm** and **16 µm** bin sizes in addition to the native 2 µm feature size.A custom bin size (in microns at even integer values between 10 and 100) can be defined in Space Ranger or via third-party tools.
-the 8 µm bin size is an effective starting point for most researchers.
-
-**Analysis, visualization, and integration of Visium HD spatial datasets with Seurat:** https://satijalab.org/seurat/articles/visiumhd_analysis_vignette)
-
-**Visium HD (segmented):** https://bioconductor.org/books/release/OSTA/pages/seq-workflow-visium-hd-seg.html
-
-| | **Bin（数字网格）** | **Cell（生物学单元）** |
-|---|---|---|
-| 是什么 | 算法划分的固定方块（如 8×8 μm） | 组织里真实的单个细胞 |
-| 谁定义的 | 生信流程（Space Ranger / SAW） | 图像 + 分子分布 |
-| 典型问题 | 跨细胞、多细胞混合、只盖住细胞一角 | 一细胞一表达谱 |
-| 经典 Visium 类比 | — | 更接近 Xenium 的单细胞输出 |
-
-| 平台 | 推荐流程 |
-|------|----------|
-| Visium HD | Space Ranger `segmented_outputs/`，或 2 μm bin + **Bin2cell** |
-| Stereo-seq | SAW → **CellBin**（利用芯片 track line 做亚像素配准） |
-| StrataMap | DRAGEN + ICM（宣称整合 1 μm 特征与分割） |
-
-### Spot vs Bin 概念速查
-
-| 比较维度 | Spot（物理捕获位点） | Bin（数字分箱/网格） |
-|----------|----------------------|----------------------|
-| 定义 | 芯片上固定的物理捕获区域 | 测序后按坐标划分的虚拟网格 |
-| 典型平台 | Visium v1/v2（55 μm spot） | Visium HD、StrataMap（2 μm / 1 μm 特征 → 8–16 μm bin 分析） |
-| 数据特点 | 多细胞混合，需去卷积 | 更细粒度，可细胞分割 |
-| 分析策略 | SPOTlight / Cell2location | 直接注释或 Bin2cell |
-
 
 
 ### 4-2:[sketch](./sketch/)
@@ -373,36 +372,5 @@ Seurat Visium HD 教程里，小鼠脑 8 μm 数据约 **39 万 bin**；在 5 �
 ## illumina
 
 <img src="illumina/workflow.png">
-
-### H&E 图像在空间转录组中的作用
-
-H&E（hematoxylin and eosin，苏木精-伊红）苏木精将细胞核染成深蓝色/紫色，伊红将细胞质染成粉红色，从而让原本透明的组织切片在显微镜下显现出清晰的解剖学和病理学结构,染色图像是空间转录组实验中重要的形态学信息来源。空间转录组技术同时获得**基因表达信息（molecular information）**和**组织空间结构信息（spatial information）**，而 H&E 图像能够提供额外的**组织形态学信息（histological information）**，帮助解析基因表达与组织结构之间的关系。 在不同空间转录组分析任务中，H&E 图像的作用有所不同：
-
-| 分析用途 | 是否需要 H&E 预处理 | 主要作用 |
-| --- | --- | --- |
-| Spot/bin 表达可视化 | 少量处理 | 将空间表达结果映射到组织区域 |
-| 空间域识别（spatial domain identification） | 通常不需要或简单处理 | 提供组织形态辅助信息，提高空间区域划分准确性 |
-| 组织区域识别（tissue detection） | 需要 | 去除背景区域，确定有效组织范围 |
-| 细胞分割（cell segmentation） | 必须 | 根据组织形态识别细胞或细胞核边界 |
-| 图像特征提取（image feature extraction） | 必须 | 提取纹理、形态、颜色等特征用于多模态分析 |
-| 深度学习模型 | 必须 | 将 H&E 图像转换为图像特征，与基因表达联合建模 |
-
-### H&E image 常见文件格式
-
-H&E（hematoxylin and eosin，苏木精-伊红）图像通常来源于数字病理扫描（Whole Slide Imaging, WSI），常见文件格式包括普通图像格式、病理扫描格式以及生物图像标准格式。
-
-| 文件格式 | 全称 | 是否常用于空间转录组 | 特点 |
-| --- | --- | --- | --- |
-| `.tif / .tiff` | Tagged Image File Format | ⭐⭐⭐⭐⭐ 最常见 | 支持超大图像、多层分辨率、无损压缩，空间转录组分析中最常用 |
-| `.ome.tiff` | Open Microscopy Environment TIFF | ⭐⭐⭐⭐⭐ 推荐 | 支持图像数据和实验元信息，适合大规模空间组学分析 |
-| `.svs` | Aperio Whole Slide Image | ⭐⭐⭐⭐ | 病理扫描仪常用格式，包含多分辨率图像 |
-| `.ndpi` | Hamamatsu NanoZoomer Digital Pathology Image | ⭐⭐⭐⭐ | Hamamatsu扫描仪生成的病理图像格式 |
-| `.scn` | Leica SCN | ⭐⭐⭐ | Leica数字病理扫描格式 |
-| `.mrxs` | MIRAX Slide Format | ⭐⭐⭐ | 3DHISTECH扫描系统常用格式 |
-| `.czi` | Zeiss CZI | ⭐⭐ | Zeiss显微镜图像格式 |
-| `.png` | Portable Network Graphics | ⭐ | 常用于可视化和小规模分析 |
-| `.jpg/jpeg` | Joint Photographic Experts Group | ⭐ | 压缩格式，一般不推荐用于定量分析 |
-
----
 
 ---
