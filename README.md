@@ -157,7 +157,9 @@ Seurat Visium HD 教程里，小鼠脑 8 μm 数据约 **39 万 bin**；在 5 �
 
 [Gingerich I K, Goods B A, Frost H R. Benchmarking sketching methods on spatial transcriptomics data[J]. Nucleic Acids Research, 2026, 54(9): gkag434.](https://academic.oup.com/nar/article-pdf/doi/10.1093/nar/gkag434/68264987/gkag434.pdf)
 
-### [SVG](./SVG/)
+### [SVG（Spatially Variable Genes，空间可变基因）](./SVG/)
+
+**Spatially variable genes:** https://www.sc-best-practices.org/spatial/spatially_variable_genes.html
 
 | | **HVG（单细胞）** | **SVG（空间转录组）** |
 |---|---|---|
@@ -190,6 +192,8 @@ Seurat Visium HD 教程里，小鼠脑 8 μm 数据约 **39 万 bin**；在 5 �
 
 #### 数据分辨率很重要
 
+综合表现较好的包括：**BinSpect、SPARK、SpatialDE、SPARK-X、dCor** 等，但具体排名因评价标准和数据集而异。
+
 | 分辨率 | 特点 | 方法选择提示 |
 |--------|------|--------------|
 | **低分辨率**（如 Visium >50 μm） | 空间模式较平滑 | 空间感知聚类（如 BayesSpace）+ SVG 组合效果更好 |
@@ -214,6 +218,7 @@ Seurat Visium HD 教程里，小鼠脑 8 μm 数据约 **39 万 bin**；在 5 �
 [Chen X, Ran Q, Tang J, et al. Benchmarking algorithms for spatially variable gene identification in spatial transcriptomics[J]. Bioinformatics, 2025, 41(4): btaf131.](https://academic.oup.com/bioinformatics/article/41/4/btaf131/8096371?login=false)
 
 [Yan G, Hua S H, Li J J. Categorization of 34 computational methods to detect spatially variable genes from spatially resolved transcriptomics data[J]. Nature Communications, 2025, 16(1): 1141.](https://www.nature.com/articles/s41467-025-56080-w)
+
 
 ### [4-2:cell_segmentation](./cell_segmentation/README.md)
 
