@@ -128,6 +128,62 @@ spatialGE:https://github.com/FridleyLab/spatialGE
 [Gingerich I K, Goods B A, Frost H R. Benchmarking sketching methods on spatial transcriptomics data[J]. Nucleic Acids Research, 2026, 54(9): gkag434.](https://academic.oup.com/nar/article-pdf/doi/10.1093/nar/gkag434/68264987/gkag434.pdf)
 
 
+### SVG
+
+| | **HVG（单细胞）** | **SVG（空间转录组）** |
+|---|---|---|
+| **问的问题** | 哪些基因在细胞间差异大？ | 哪些基因在**空间上**有非随机分布？ |
+| **利用的信息** | 表达矩阵 | 表达矩阵 + **坐标** |
+| **典型用途** | 降维、聚类、批次校正 | 特征筛选、空间域发现、机制解读 |
+| **可能遗漏** | 有空间梯度但细胞间差异不大的基因 | 细胞类型 marker，但本身无显著空间模式 |
+
+#### SVG 分为 **三类**：
+
+##### 1. Overall SVGs（整体空间可变基因）
+
+- **定义**：在整个组织层面，基因表达呈现非随机的空间模式
+- **用途**：为下游分析（空间域识别、功能模块）筛选**信息量大**的特征基因
+- **类比单细胞**：最接近「全局 HVG」，但加了空间约束
+
+##### 2. Cell-type-specific SVGs（细胞类型特异性 SVG）
+
+- **定义**：在**某一种细胞类型内部**，基因表达仍随空间位置变化
+- **用途**：发现同一细胞类型的**空间亚状态**（如肿瘤边缘 vs 核心的巨噬细胞）
+- **需要**：已知或推断的细胞类型信息
+
+##### 3. Spatial-domain-marker SVGs（空间域 marker 基因）
+
+- **定义**：在**已划定的空间域内**高表达的基因
+- **用途**：解释某个空间区域的分子特征
+- **需要**：先做空间域划分，再找 marker
+
+#### 数据分辨率很重要
+
+| 分辨率 | 特点 | 方法选择提示 |
+|--------|------|--------------|
+| **低分辨率**（如 Visium >50 μm） | 空间模式较平滑 | 空间感知聚类（如 BayesSpace）+ SVG 组合效果更好 |
+| **高分辨率**（<20 μm，如 Slide-seq、Stereo-seq） | 更稀疏、更精细 | BinSpect 较稳健；Moran's I 类方法（MERINGUE）在高分辨率稀疏数据上可能偏弱 |
+| **中分辨率** | 介于两者之间 | SOMDE 等合并邻近位点的方法可能更有优势 |
+
+- 若目标是 **空间域聚类**：低分辨率数据优先考虑 SVG + **BayesSpace**
+- 若目标是 **高分辨率精细分域**：SVG + 传统 scRNA-seq 聚类（Louvain/Leiden）有时反而更好
+
+| 你的场景 | 更倾向参考 |
+|----------|------------|
+| Visium / 10x 入门，要快速筛 + 稳健 | **SPARK-X**（两篇文均表现突出；2024 文强调速度与稀疏稳健性） |
+| Squidpy / Scanpy 生态，先跑通流程 | **Moran's I**（快、教程多；但 **p 值需谨慎**，建议配合可视化） |
+| 需要统计框架完整、模拟数据 FDR 较准 | **SpatialDE、SOMDE、nnSVG** |
+| 数据很稀疏、spot 数波动大 | 优先 **SPARK-X / SpatialDE / SOMDE**；慎用对下采样敏感的 Giotto / MERINGUE |
+| 做空间域聚类 | top SVG 取 **~1000 个** 左右试探（Chen C 2024）；低分辨率可叠加 **BayesSpace**（Chen X 2025） |
+
+[Chen C, Kim H J, Yang P. Evaluating spatially variable gene detection methods for spatial transcriptomics data[J]. Genome Biology, 2024, 25(1): 18.](https://link.springer.com/article/10.1186/s13059-023-03145-y)
+
+[Adhikari S D, Yang J, Wang J, et al. Recent advances in spatially variable gene detection in spatial transcriptomics[J]. Computational and Structural Biotechnology Journal, 2024, 23: 883-891.](https://www.sciencedirect.com/science/article/pii/S2001037024000163)
+
+[Chen X, Ran Q, Tang J, et al. Benchmarking algorithms for spatially variable gene identification in spatial transcriptomics[J]. Bioinformatics, 2025, 41(4): btaf131.](https://academic.oup.com/bioinformatics/article/41/4/btaf131/8096371?login=false)
+
+[Yan G, Hua S H, Li J J. Categorization of 34 computational methods to detect spatially variable genes from spatially resolved transcriptomics data[J]. Nature Communications, 2025, 16(1): 1141.](https://www.nature.com/articles/s41467-025-56080-w)
+
 ### [4-2:cell_segmentation](./cell_segmentation/README.md)
 
 **Visium HD (segmented):** https://bioconductor.org/books/release/OSTA/pages/seq-workflow-visium-hd-seg.html
