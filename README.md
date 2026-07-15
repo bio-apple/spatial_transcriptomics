@@ -119,13 +119,14 @@ Nature Methods 将 Spatially Resolved Transcriptomics（空间转录组学） �
 
 spatialGE:https://github.com/FridleyLab/spatialGE
 
-### 4-1:Bin
+### 4-1:[Bin2cell:segmentation](./Bin2cell_segmentation)
 
 SpaceRanger outputs Visium HD data at three bin sizes, offering **8 µm** and **16 µm** bin sizes in addition to the native 2 µm feature size.A custom bin size (in microns at even integer values between 10 and 100) can be defined in Space Ranger or via third-party tools.
 the 8 µm bin size is an effective starting point for most researchers.
 
-[Analysis, visualization, and integration of Visium HD spatial datasets with Seurat](https://satijalab.org/seurat/articles/visiumhd_analysis_vignette)
+**Analysis, visualization, and integration of Visium HD spatial datasets with Seurat:** https://satijalab.org/seurat/articles/visiumhd_analysis_vignette)
 
+**Visium HD (segmented):** https://bioconductor.org/books/release/OSTA/pages/seq-workflow-visium-hd-seg.html
 
 ### 4-2:[sketch](./sketch/)
 
@@ -224,12 +225,6 @@ Seurat Visium HD 教程里，小鼠脑 8 μm 数据约 **39 万 bin**；在 5 �
 [Chen X, Ran Q, Tang J, et al. Benchmarking algorithms for spatially variable gene identification in spatial transcriptomics[J]. Bioinformatics, 2025, 41(4): btaf131.](https://academic.oup.com/bioinformatics/article/41/4/btaf131/8096371?login=false)
 
 [Yan G, Hua S H, Li J J. Categorization of 34 computational methods to detect spatially variable genes from spatially resolved transcriptomics data[J]. Nature Communications, 2025, 16(1): 1141.](https://www.nature.com/articles/s41467-025-56080-w)
-
-
-### [4-2:cell_segmentation](./cell_segmentation/README.md)
-
-**Visium HD (segmented):** https://bioconductor.org/books/release/OSTA/pages/seq-workflow-visium-hd-seg.html
-
 
 ---
 
