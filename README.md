@@ -121,6 +121,12 @@ spatialGE:https://github.com/FridleyLab/spatialGE
 
 ### 4-1:Bin
 
+SpaceRanger outputs Visium HD data at three bin sizes, offering **8 µm** and **16 µm** bin sizes in addition to the native 2 µm feature size.A custom bin size (in microns at even integer values between 10 and 100) can be defined in Space Ranger or via third-party tools.
+the 8 µm bin size is an effective starting point for most researchers.
+
+[Analysis, visualization, and integration of Visium HD spatial datasets with Seurat](https://satijalab.org/seurat/articles/visiumhd_analysis_vignette)
+
+
 ### 4-2:[sketch](./sketch/)
 
 <img src="./sketch/sketched.jpeg">
