@@ -43,13 +43,13 @@ Nature Methods 将 Spatially Resolved Transcriptomics（空间转录组学） �
 | **G2** | 测序法 · 高分辨率 | 10x Visium HD、Stereo-seq、**Illumina StrataMap Spatial** ★ |
 | **G3** | 成像法 · 单细胞/亚细胞 | Vizgen MERSCOPE、10x Xenium、Bruker CosMx SMI |
 
->**G1：测序法 · 低分辨率（spot/ROI 级)**
+>**G1：测序法 · 低分辨率（spot/ROI 级)** 
 > 
->     | 平台 | 分辨率 | 基因覆盖 | 适合场景 |
->     |------|--------|----------|----------|
->     | **10x Visium** | 55 μm spot（多细胞） | 全转录组 | 最快上手、无偏发现、FF/FFPE |
->     | **GeoMx DSP** | >55 μm ROI（建议 ≥50 细胞） | ROI 内全转录组 + 570 蛋白 | 病理圈选区域、多活检并行 |
-
+>| 平台 | 分辨率 | 基因覆盖 | 适合场景 |
+> |------|--------|----------|----------|
+> | **10x Visium** | 55 μm spot（多细胞） | 全转录组 | 最快上手、无偏发现、FF/FFPE |
+> | **GeoMx DSP** | >55 μm ROI（建议 ≥50 细胞） | ROI 内全转录组 + 570 蛋白 | 病理圈选区域、多活检并行 |
+>
 >**G2：测序法 · 高分辨率（单细胞尺度）**
 > 
 > | 平台 | 分辨率 | 基因覆盖 | 适合场景 |
@@ -57,7 +57,7 @@ Nature Methods 将 Spatially Resolved Transcriptomics（空间转录组学） �
 > | **Visium HD** | 2 μm 连续网格（分析常用 8/16 μm bin） | 全转录组 | FFPE 成熟生态 + 近单细胞精度 |
 > | **Stereo-seq** | 0.22 μm DNB 特征 | 全转录组 | 任意物种、超大捕获面积（cm 级） |
 > | **Illumina StrataMap** ★ | 1 μm 连续特征 + 细胞分割 | 全转录组（polyA⁺） | 大捕获面积（最大 50×15 mm）、Illumina 测序栈 |
-
+>
 > G3：成像法 · 单细胞/亚细胞**
 >
 >| 平台 | 分辨率 | 基因覆盖 | 适合场景 |
@@ -79,13 +79,13 @@ Nature Methods 将 Spatially Resolved Transcriptomics（空间转录组学） �
 | 靶向 panel + 开放定制任意物种 | **MERSCOPE**（G3） |
 | 靶向高多重（6K）或准全转录组成像（WTX ~18K） | **CosMx**（G3） |
 
-样本类型决策补充:
-
-| 样本类型 | 推荐平台 |
-|----------|----------|
-| **FFPE 归档样本** | Visium v2/CytAssist、Visium HD、Xenium、CosMx |
-| **新鲜冷冻 FF** | Visium、Stereo-seq、StrataMap（当前仅 FF） |
-| **非模式物种** | Visium（polyA⁺）、Stereo-seq（定制探针）、MERSCOPE（≤1000 基因无设计费）、StrataMap（polyA⁺ 真核通用） |
+>样本类型决策补充:
+>
+>| 样本类型 | 推荐平台 |
+>|----------|----------|
+>| **FFPE 归档样本** | Visium v2/CytAssist、Visium HD、Xenium、CosMx |
+>| **新鲜冷冻 FF** | Visium、Stereo-seq、StrataMap（当前仅 FF） |
+>| **非模式物种** | Visium（polyA⁺）、Stereo-seq（定制探针）、MERSCOPE（≤1000 基因无设计费）、StrataMap（polyA⁺ 真核通用） |
 
 **注释**  
 - *FF*：Fresh Frozen（新鲜冷冻）；*FFPE*：福尔马林固定石蜡包埋；*FxF*：Fixed Frozen（固定冷冻）
