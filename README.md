@@ -19,7 +19,7 @@ Nature Methods 将 Spatially Resolved Transcriptomics（空间转录组学） �
 **SIB Days tutorial: Analysis of spatial transcriptomics data:** https://sib-swiss.github.io/spatial-transcriptomics-training/
 
 ---
-## Reviews paper
+## [Reviews paper](./Reviews/)
 
 [Grases D, Porta-Pardo E. A practical guide to spatial transcriptomics: lessons from over 1000 samples[J]. Trends in biotechnology, 2025.](https://www.cell.com/trends/biotechnology/abstract/S0167-7799(25)00357-9)
 
