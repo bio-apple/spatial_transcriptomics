@@ -21,6 +21,60 @@ Nature Methods 将 Spatially Resolved Transcriptomics（空间转录组学） �
 ---
 ## [Reviews paper](./Reviews/)
 
+新手推荐路径
+
+| 平台 | 推荐流程 |
+|------|----------|
+| **Visium** | Space Ranger → Seurat → SPOTlight 去卷积 |
+| **Visium HD** | Space Ranger（选 8 μm bin）→ Seurat / Scanpy → 可选 Bin2cell |
+| **Xenium / CosMx** | 官方 pipeline → Seurat / Squidpy → 直接细胞级注释 |
+
+整合决策框架：从立项到分析
+
+```
+Step 1  明确科学问题
+        ├─ 无偏发现？ → G1/G2 测序法
+        ├─ 已知区域比较？ → GeoMx
+        ├─ 单细胞精度验证？ → G3 成像法
+        └─ 3D 重建/多切片？ → 预留对齐分析（PASTE2/Spateo）
+
+Step 2  评估样本条件
+        ├─ FFPE 归档 → Visium HD / Xenium / CosMx
+        ├─ 新鲜组织 → Visium / Stereo-seq / StrataMap
+        └─ 非模式物种 → Visium polyA⁺ / MERSCOPE 定制 / Stereo-seq
+
+Step 3  权衡预算与通量
+        ├─ 预算有限、快速探索 → Visium（G1）
+        ├─ 大组织、大队列 → StrataMap / Stereo-seq 大面积
+        └─ 精准验证 → Xenium / CosMx panel
+
+Step 4  设计分析流程
+        ├─ 质控（SpatialQC）
+        ├─ 可视化 + 域识别
+        ├─ Spot 数据 → 去卷积；Bin/Cell 数据 → 直接注释
+        └─ 细胞通讯 + 与 scRNA-seq 整合
+
+Step 5  验证
+        └─ 病理专家 + 独立样本 + 功能实验
+```
+
+分析工具地图（按环节选型）
+
+| 环节 | 工具 | 适用 |
+|------|------|------|
+| 原始数据处理 | Space Ranger、GeomxTools | 10x / GeoMx |
+| 探索可视化 | Seurat、Squidpy、Giotto、Loupe | R / Python |
+| 无代码 | spatialGE-web | 入门友好 |
+| 质控 | SpatialQC | 空间专用 QC |
+| 组织域识别 | SpaGCN、GraphST、BayesSpace | 整合空间坐标 ± 图像 |
+| 空间可变基因 | SPARK、SpatialDE | 区域特异性表达 |
+| 细胞去卷积 | SPOTlight、Cell2location、RCTD | Spot 级数据必备 |
+| 细胞分割（HD） | Bin2cell、Space Ranger segment | 2 μm bin → 单细胞 |
+| 大样本子抽样 | Seurat SketchData、spatially smoothed leverage | Visium HD / atlas 尺度 |
+| 切片对齐/3D | PASTE2、Spateo、SABench 评测 | 多切片整合 |
+| 细胞通讯 | CellChat（空间版）、NICHES | L-R + 距离 |
+| 数据资源 | CROST、STomicsDB | 公开数据浏览与在线分析 |
+
 [Grases D, Porta-Pardo E. A practical guide to spatial transcriptomics: lessons from over 1000 samples[J]. Trends in biotechnology, 2025.](https://www.cell.com/trends/biotechnology/abstract/S0167-7799(25)00357-9)
 
 [Heumos L, Schaar A C, Lance C, et al. Best practices for single-cell analysis across modalities[J]. Nature Reviews Genetics, 2023, 24(8): 550-572.](https://www.nature.com/articles/s41576-023-00586-w)
@@ -235,6 +289,14 @@ the 8 µm bin size is an effective starting point for most researchers.
 
 ## [QC](./QC/README.md)
 
+常见质量问题包括：
+
+- 测序深度不足
+- 不同切片之间质量参差不齐
+- 局部区域信号异常（如组织边缘、非组织区域）
+
+**SpatialQC** 是一款基于 Python 的开源工具，目标是**一键完成质量评估、数据清洗和报告生成**。
+
 <img src="QC/SpatialQC.jpeg">
 
 [Mao G, Yang Y, Luo Z, et al. SpatialQC: automated quality control for spatial transcriptome data[J]. Bioinformatics, 2024, 40(8): btae458.](https://academic.oup.com/bioinformatics/article/40/8/btae458/7720780?login=false)
@@ -390,6 +452,14 @@ Seurat Visium HD 教程里，小鼠脑 8 μm 数据约 **39 万 bin**；在 5 �
 ## illumina
 
 <img src="illumina/workflow.png">
+
+| 项目 | 最新信息 |
+|------|----------|
+| 发布状态 | 2026 年 6 月正式商业化（Research Use Only） |
+| 核心定位 | 测序法、无偏全转录组、**1 µm 特征密度**、大捕获面积 |
+| 样本 | 当前仅 **FF**；FFPE 版本开发中（目标 2027 年客户启用） |
+| 捕获面积 | 50 × 15 mm（750 mm²）或 17 × 15 mm；支持多切片并行 |
+| 灵敏度（官方开发数据） | 10 × 10 µm bin 最高 ~4000 unique transcripts；检测基因数约为同类 panel 平台 **>2×** |
 
 * The starting sequencing depth recommendation is 5,000 raw reads per 10x10 um tissue. 
 * StrataMap Spatial detected up to 4000 unique transcripts per 10 × 10 µm bin

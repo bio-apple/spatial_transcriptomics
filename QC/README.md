@@ -1,25 +1,4 @@
-# SpatialQC：空间转录组质控的一站式解决方案
 
-> 论文解读 | Mao G, Yang Y, et al. *Bioinformatics*, 2024, 40(8): btae458  
-> 原文链接：[https://academic.oup.com/bioinformatics/article/40/8/btae458/7720780](https://academic.oup.com/bioinformatics/article/40/8/btae458/7720780)  
-> 工具地址：[https://github.com/mgy520/spatialQC](https://github.com/mgy520/spatialQC)  
-> 使用文档：[https://mgy520.github.io/SpatialQC](https://mgy520.github.io/SpatialQC)
-
----
-
-## 一、研究背景
-
-空间转录组技术让我们能够在组织原位观察基因表达，揭示细胞的空间分布与微环境互作。然而，在聚类、注释、细胞通讯等下游分析之前，**数据质控（QC）** 是必不可少的第一步。
-
-常见质量问题包括：
-
-- 测序深度不足
-- 不同切片之间质量参差不齐
-- 局部区域信号异常（如组织边缘、非组织区域）
-
-目前多数 QC 工具面向单细胞 RNA-seq 设计，**难以直接满足空间转录组的特殊需求**。东南大学毛光耀、杨毅等人在 *Bioinformatics* 发表了 **SpatialQC**，提供面向空间转录组的一站式质控流程。
-
----
 
 ## 二、现有工具的不足
 
@@ -201,17 +180,6 @@ adata = model.train()
 
 ---
 
-## 八、总结
-
-SpatialQC 填补了空间转录组专用质控工具的空白，主要优势包括：
-
-1. **空间感知**：QC 指标可映射到组织空间坐标，发现局部异常
-2. **切片级质控**：适合多切片、3D 空间转录组实验
-3. **平台适配**：针对 Visium、Stereo-seq、MERFISH 等预设参数
-4. **交互式报告**：参数敏感性分析，辅助阈值选择
-5. **格式兼容**：支持 Python 和 R 生态的主流数据对象
-
-在空间转录组分析流程中，建议在聚类、去卷积、细胞通讯等下游分析之前，先运行 SpatialQC 评估数据质量。
 
 ---
 
