@@ -33,7 +33,7 @@ Nature Methods 将 Spatially Resolved Transcriptomics（空间转录组学） �
 
 ---
 
-## [0.platform](./0.platform/)
+## [platform](./platform/)
 
 ### 平台分类
 
@@ -98,7 +98,7 @@ Nature Methods 将 Spatially Resolved Transcriptomics（空间转录组学） �
 
 ---
 
-## 1.raw_data
+## raw_data
 
 ### L0：湿实验端原始数据
 >**共通文件**
@@ -202,7 +202,7 @@ Nature Methods 将 Spatially Resolved Transcriptomics（空间转录组学） �
 
 ---
 
-## 2.Bin_vs_Spot
+## Bin_vs_Spot
 
 SpaceRanger outputs Visium HD data at three bin sizes, offering **8 µm** and **16 µm** bin sizes in addition to the native 2 µm feature size.A custom bin size (in microns at even integer values between 10 and 100) can be defined in Space Ranger or via third-party tools.
 the 8 µm bin size is an effective starting point for most researchers.
@@ -236,17 +236,17 @@ the 8 µm bin size is an effective starting point for most researchers.
 * 1-12 tissue sections can be placed on each slide
 ---
 
-## [3.QC](./3.QC/README.md)
+## [QC](./QC/README.md)
 
-<img src="2.QC/SpatialQC.jpeg">
+<img src="QC/SpatialQC.jpeg">
 
 [Mao G, Yang Y, Luo Z, et al. SpatialQC: automated quality control for spatial transcriptome data[J]. Bioinformatics, 2024, 40(8): btae458.](https://academic.oup.com/bioinformatics/article/40/8/btae458/7720780?login=false)
 
 ---
 
-## [3.alignment](./3.alignment/README.md)
+## [alignment](./alignment/README.md)
 
-<img src="3.alignment/spatial_alignment.png" height=650 width=500>
+<img src="alignment/spatial_alignment.png" height=650 width=500>
 
 | 维度 | 核心结论 |
 |------|----------|
@@ -266,9 +266,9 @@ the 8 µm bin size is an effective starting point for most researchers.
 
 ---
 
-## [4.pipeline](4.pipeline/README.md)
+## [pipeline](pipeline/README.md)
 
-<img src="4.pipeline/pipeline.png">
+<img src="pipeline/pipeline.png">
 
 spatialGE:https://github.com/FridleyLab/spatialGE
 
