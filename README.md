@@ -308,7 +308,9 @@ the 8 µm bin size is an effective starting point for most researchers.
 评分结果可在 QC 报告中以**空间分布图**展示，用于发现局部异常。
 
 2. 三层递进过滤
+
 <img src="QC/SpatialQC.png" height=292 width=800>
+
 ```
 输入数据
     ↓
