@@ -295,9 +295,39 @@ the 8 µm bin size is an effective starting point for most researchers.
 - 不同切片之间质量参差不齐
 - 局部区域信号异常（如组织边缘、非组织区域）
 
-**SpatialQC** 是一款基于 Python 的开源工具，目标是**一键完成质量评估、数据清洗和报告生成**。
+**SpatialQC** 是一款基于 Python 的开源工具，目标是**一键完成质量评估、数据清洗和报告生成**。 SpatialQC 包含三个主要模块：**细胞/spot 评分 → 数据过滤 → 报告生成**。
 
-<img src="QC/SpatialQC.jpeg">
+1. 细胞/spot 评分，对每个捕获单元综合评估以下指标：
+
+- 线粒体基因比例
+- 检测到的基因数（`n_genes`）
+- UMI 总数（`n_counts`）
+- 标记基因检出比例
+- 双联体评分（Scrublet）
+
+评分结果可在 QC 报告中以**空间分布图**展示，用于发现局部异常。
+
+2. 三层递进过滤
+<img src="QC/SpatialQC.png" height=292 width=800>
+```
+输入数据
+    ↓
+【切片级过滤】剔除整体质量差的切片（中位得分 < 5，可调）
+    ↓
+【细胞/spot 级过滤】按 min_genes 过滤低深度单元；去除双联体和高线粒体比例细胞
+    ↓
+【基因级过滤】过滤在过少细胞中表达的基因，尽量保留标记基因
+    ↓
+输出：过滤后的 AnnData + HTML 交互式报告
+```
+
+| 过滤层级 | 主要参数 | 默认策略示例 |
+|----------|----------|--------------|
+| 切片级 | `min_score` | 切片中位细胞得分 < 5 则剔除 |
+| 细胞/spot 级 | `min_genes`, `mito_percent` | Stereo-seq 建议保留 >70% 细胞；线粒体比例默认 <10% |
+| 基因级 | `min_cells` | 尽量保留 >99% 标记基因 |
+
+不同平台提供预设参数组合，用户也可手动调整。
 
 [Mao G, Yang Y, Luo Z, et al. SpatialQC: automated quality control for spatial transcriptome data[J]. Bioinformatics, 2024, 40(8): btae458.](https://academic.oup.com/bioinformatics/article/40/8/btae458/7720780?login=false)
 
