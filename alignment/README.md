@@ -140,21 +140,7 @@ gkaf536 指出领域**缺乏统一 benchmark**；复旦大学颜云智等发布 
 
 ### 4.1 评测范围
 
-**纳入的 11 种方法**
 
-| 方法 | 对齐类型 | 特点 |
-|------|----------|------|
-| PASTE | 线性 | 经典多切片对齐 |
-| PASTE2 | 线性 | 支持部分重叠切片 |
-| STAligner | 混合 | 依赖 landmark 选择 |
-| GPSA | 非线性 | 深度高斯过程 |
-| SLAT | 混合 | 返回匹配点对 |
-| STalign | 非线性 | 成对对齐；需单细胞分辨率 |
-| CAST | 混合 | 支持跨平台；仅成对 |
-| STAIR | 混合 | 对齐 + 整合 + 3D 重建 |
-| SPACEL | 混合 | 利用区域信息，稳定性强 |
-| Spateo | 混合 | 多切片表现优异 |
-| SANTO | 混合 | 粗到细对齐；仅成对 |
 
 **数据规模**：240 张切片，260 对真实 + 35 对模拟，**295 个对齐任务**；覆盖 Visium、Visium HD、MERFISH、Stereo-seq、Xenium、CosMx 等 **14 种**平台。
 
@@ -246,42 +232,7 @@ gkaf536 指出领域**缺乏统一 benchmark**；复旦大学颜云智等发布 
    └── 3D 聚类、空间域识别、细胞通讯等
 ```
 
-### 5.3 特殊场景
 
-| 场景 | 建议 |
-|------|------|
-| 内存溢出 | 降分辨率 → 对齐 → 恢复分辨率（PA+DR） |
-| 对齐质量差 | 参数调优 → 换方法 → 手动 landmark |
-| 跨平台 | CAST/STAligner 可尝试，但需降低预期 |
-| 超大数据 | 预对齐 + 降采样 + 参数优化组合 |
-
----
-
-## 六、下游应用（gkaf536）
-
-| 应用方向 | 代表案例 |
-|----------|----------|
-| **组织 profiling** | PASTE 在 DLPFC 无监督恢复层 marker |
-| **细胞类型/空间域聚类** | 整合后聚类优于纯 scRNA-seq 整合 |
-| **发育分析** | STAligner 追踪小鼠胚胎器官比例变化 |
-| **疾病进展** | ATAT 对齐 UC/CD 结肠切片 |
-| **生物标志物** | GPSA 识别乳腺癌 PRSS23、CST4 |
-
----
-
-## 七、尚未解决的问题与未来方向
-
-| 问题 | 说明 |
-|------|------|
-| **可扩展性** | 百万级 spot 全自动对齐仍困难 |
-| **跨平台对齐** | 生物学意义重大，SABench 证实普遍不足 |
-| **H&E 利用不足** | 多数工具未充分做 3D 形态重建 |
-| **软组织** | 脑以外 inter-sample 变异大的组织仍是难点 |
-| **与 scRNA 整合混淆** | ST-spot 对齐 ≠ ST-scRNA 整合 |
-
-**未来方向**：跨组学对齐、时空组学对齐、LLM 辅助对齐、标准化 benchmark（SABench 已迈出一步）
-
----
 
 ## 八、SABench 工具包
 
@@ -323,19 +274,3 @@ gkaf536 指出领域**缺乏统一 benchmark**；复旦大学颜云智等发布 
 
 2. Yan Y, Gu T, Sun C, Zhang Y, Cui Y, Lin S, et al. Benchmarking alignment methods for spatial transcriptomics data. *Nature Computational Science*, 2026. https://doi.org/10.1038/s43588-026-00977-z
 
-### 工具与数据
-
-- SABench: https://github.com/Yunzhi-Yan/SABench  
-- Zenodo: https://doi.org/10.5281/zenodo.18605715
-
-### 主要对标方法
-
-- PASTE: Zeira et al., *Nat Methods*, 2022  
-- PASTE2: Liu et al., *Genome Res*, 2023  
-- STAligner: Long et al., *Nat Commun*, 2022  
-- Spateo: Qian et al., *Cell*, 2024  
-- SPACEL: Li et al., *Nat Commun*, 2023  
-- CAST: Fan et al., *Nat Methods*, 2023  
-- SANTO: Li et al., *Nat Commun*, 2024  
-- SLAT: Li et al., *Nat Methods*, 2023  
-- STalign: Russell et al., *Nat Methods*, 2023

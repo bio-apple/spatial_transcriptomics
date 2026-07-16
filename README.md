@@ -231,9 +231,6 @@ the 8 µm bin size is an effective starting point for most researchers.
 | **Bin 50** | $50 \times 50$ | **$25\text{ }\mu\text{m}$** | **多细胞级**（约覆盖 $2 \sim 4$ 个细胞，信号更丰富） |
 | **Bin 100** | $100 \times 100$ | **$50\text{ }\mu\text{m}$** | **组织结构域级**（接近经典版 10x Visium 的 $55\text{ }\mu\text{m}$ Spot） |
 
-* The starting sequencing depth recommendation is 5,000 raw reads per 10x10 um tissue. 
-* StrataMap Spatial detected up to 4000 unique transcripts per 10 × 10 µm bin
-* 1-12 tissue sections can be placed on each slide
 ---
 
 ## [QC](./QC/README.md)
@@ -248,6 +245,18 @@ the 8 µm bin size is an effective starting point for most researchers.
 
 <img src="alignment/spatial_alignment.png" height=650 width=500>
 
+单张 Visium 切片约 5000 个 spot，Visium HD / Xenium 一张可达 **20 万～50 万** 位点。要理解完整组织，通常需要**多张连续切片**叠成 3D 视图，或把**不同实验、不同平台**的切片对齐到同一 **CCS（Common Coordinate System，公共坐标系）**。 这就是空间转录组里的 **alignment（对齐）** 与 **integration（整合）**——保留基因表达模式与空间关系，同时消除切片间形变与批次差异。
+
+常用 Benchmark 数据集
+
+| 数据集 | 平台 | 用途 |
+|--------|------|------|
+| **DLPFC**（人前额叶皮层） | 10x Visium | 12 片连续切片，6 层皮层注释 |
+| **Stereo-seq 小鼠胚胎** | Stereo-seq | 不同发育时间点 |
+| **Slide-seq 海马** | Slide-seq | 连续切片 3D 重建 |
+| **MERFISH 脑** | MERFISH | 跨冠状/矢状面对齐 |
+| **Xenium 乳腺癌** | 10x Xenium | 病理注释验证 |
+
 | 维度 | 核心结论 |
 |------|----------|
 | 总体 | **没有万能冠军**，方法选择高度依赖平台与场景 |
@@ -260,6 +269,12 @@ the 8 µm bin size is an effective starting point for most researchers.
 | 下游 | 好对齐显著提升 3D 空间聚类精度 |
 | 工具 | SABench 提供可复现的评测框架 |
 
+| 平台类别 | 综合前三 |
+|----------|----------|
+| **NGS 类**（ST、Visium、Stereo-seq） | **PASTE2、SPACEL、Spateo** |
+| **成像类**（MERFISH、BaristaSeq、STARmap） | **Spateo、STAIR、SPACEL** |
+
+
 [Yan Y, Gu T, Sun C, et al. Benchmarking alignment methods for spatial transcriptomics data[J]. Nature Computational Science, 2026: 1-18.](https://www.nature.com/articles/s43588-026-00977-z)
 
 [Khan M, Arslanturk S, Draghici S. A comprehensive review of spatial transcriptomics data alignment and integration[J]. Nucleic acids research, 2025, 53(12): gkaf536.](https://academic.oup.com/nar/article/53/12/gkaf536/8174767?login=false)
@@ -271,7 +286,6 @@ the 8 µm bin size is an effective starting point for most researchers.
 <img src="pipeline/pipeline.png">
 
 spatialGE:https://github.com/FridleyLab/spatialGE
-
 
 ### 4-2:[sketch](./sketch/)
 
@@ -377,4 +391,7 @@ Seurat Visium HD 教程里，小鼠脑 8 μm 数据约 **39 万 bin**；在 5 �
 
 <img src="illumina/workflow.png">
 
+* The starting sequencing depth recommendation is 5,000 raw reads per 10x10 um tissue. 
+* StrataMap Spatial detected up to 4000 unique transcripts per 10 × 10 µm bin
+* 1-12 tissue sections can be placed on each slide
 ---
