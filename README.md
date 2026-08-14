@@ -377,8 +377,6 @@ the 8 µm bin size is an effective starting point for most researchers.
 
 ## [pipeline](pipeline/README.md)
 
-<img src="pipeline/pipeline.png">
-
 spatialGE:https://github.com/FridleyLab/spatialGE
 
 ### 4-2:[sketch](./sketch/)
